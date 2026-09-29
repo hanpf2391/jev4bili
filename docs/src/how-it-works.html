@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>JEV4Bili · 它是怎么工作的</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { width: 1440px; height: 660px; overflow: hidden; background: #FFFFFF; }
+  svg { display: block; }
+
+  /* 手写体：Zhi Mang Xing 是真手写；标题用庆科黄油体（马克笔感、更抓眼） */
+  .hw    { font-family: "Zhi Mang Xing", "LXGW WenKai", "Yuanti SC", "Microsoft YaHei UI", sans-serif; }
+  .title { font-family: "ZCOOL QingKe HuangYou", "Zhi Mang Xing", "Yuanti SC", sans-serif; }
+
+  /* 品牌色板——与 app/src/main/res/values/colors.xml 对齐 */
+  .ink   { fill: #181D26; }  .muted { fill: #525C6B; }  .blue  { fill: #1B61C9; }
+  .red   { fill: #DC2626; }  .amber { fill: #EAB308; }  .green { fill: #006400; }
+
+  .s-ink  { stroke: #181D26; fill: none; }
+  .s-blue { stroke: #1B61C9; fill: none; }
+  .s-pink { stroke: #FB7299; fill: none; }
+  .s-soft { stroke: #C9CED6; fill: none; }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1440 660" width="1440" height="660" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <!-- 手绘抖动：细噪声 + 小位移，让所有直线轻微发颤（只作用于图形，不作用于文字） -->
+    <filter id="sk" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.021" numOctaves="3" seed="11" result="n" />
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sk2" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="n" />
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.9" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <marker id="ah" viewBox="0 0 12 12" refX="8.5" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1.5 1.2 L10 6 L1.5 10.8" fill="none" stroke="#1B61C9" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+
+    <!-- 黑色小人：大头、锥形身、细四肢（参考图那种白板涂鸦角色） -->
+    <g id="blob">
+      <path d="M-6 6 L-10 40 M6 6 L10 40" stroke="#181D26" stroke-width="5" stroke-linecap="round" fill="none" />
+      <path d="M-16 -32 Q-18 0 -6 6 L6 6 Q18 0 16 -32 Z" fill="#181D26" />
+      <path d="M-14 -22 L-30 2 M14 -22 L30 -8" stroke="#181D26" stroke-width="5" stroke-linecap="round" fill="none" />
+      <circle cx="0" cy="-38" r="19" fill="#181D26" />
+    </g>
+  </defs>
+
+  <!-- ═══════════════ 标题行 ═══════════════ -->
+  <text class="title ink" x="72" y="54" font-size="27">它只做一件事：读屏上公开的文字，替你判一条「值不值得看」</text>
+  <path class="s-soft" d="M72 76 H1368" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" filter="url(#sk2)" />
+
+  <!-- ═══════════════ ① B站「看看」竖屏流 ═══════════════ -->
+  <text class="title ink" x="136" y="222" font-size="24" text-anchor="middle">B站「看看」竖屏流</text>
+  <text class="hw muted" x="136" y="248" font-size="17" text-anchor="middle">你屏幕上本来就看得见的东西</text>
+  <g filter="url(#sk)">
+    <rect x="76" y="266" width="120" height="204" rx="16" class="s-ink" stroke-width="3.4" />
+    <path class="s-ink" d="M120 278 H152" stroke-width="3" stroke-linecap="round" />
+    <rect x="87" y="296" width="98" height="80" rx="8" class="s-pink" stroke-width="2.8" />
+    <path class="s-ink" d="M96 316 H176 M96 330 H156" stroke-width="2.6" stroke-linecap="round" />
+    <path class="s-ink" d="M96 348 H140 M96 362 H126" stroke-width="2.2" stroke-linecap="round" />
+    <rect x="87" y="388" width="98" height="66" rx="8" class="s-soft" stroke-width="2.6" />
+    <path class="s-soft" d="M96 408 H176 M96 422 H150" stroke-width="2.4" stroke-linecap="round" />
+  </g>
+  <text class="hw muted" x="136" y="504" font-size="17" text-anchor="middle">标题 · UP主 · 点赞数</text>
+  <text class="hw blue" x="136" y="528" font-size="17" text-anchor="middle">只读这几个数，别的不要</text>
+
+  <!-- 小人 A：站在手机左边看屏 -->
+  <use href="#blob" x="46" y="440" transform="translate(0,0)" filter="url(#sk2)" />
+
+  <!-- ═══════════════ 箭头 ①→② ═══════════════ -->
+  <g filter="url(#sk2)">
+    <path class="s-blue" d="M202 356 C226 340 268 340 300 356" stroke-width="4"
+          stroke-linecap="round" marker-end="url(#ah)" />
+  </g>
+
+  <!-- ═══════════════ ② 安卓无障碍服务读屏 ═══════════════ -->
+  <text class="title ink" x="401" y="222" font-size="24" text-anchor="middle">安卓无障碍服务</text>
+  <text class="hw muted" x="401" y="248" font-size="17" text-anchor="middle">不截图、不上传，只拿屏幕上的字</text>
+  <g filter="url(#sk)">
+    <rect x="306" y="266" width="190" height="204" rx="16" class="s-ink" stroke-width="3.4" />
+    <!-- 被"读到"的那一行：先铺高亮底色，再压黑字，读起来才是"这行被选中了" -->
+    <path class="s-blue" d="M326 320 H470" stroke-width="20" stroke-linecap="round" opacity="0.13" />
+    <path class="s-ink" d="M326 320 H470" stroke-width="3.2" stroke-linecap="round" />
+    <path class="s-ink" d="M326 296 H430 M326 346 H456 M326 370 H400"
+          stroke-width="2.8" stroke-linecap="round" />
+    <!-- 放大镜 -->
+    <circle cx="428" cy="408" r="30" class="s-blue" stroke-width="3.6" />
+    <path class="s-blue" d="M450 430 L476 456" stroke-width="5" stroke-linecap="round" />
+  </g>
+  <text class="hw muted" x="401" y="504" font-size="17" text-anchor="middle">含相邻卡预读</text>
+  <text class="hw blue" x="401" y="528" font-size="17" text-anchor="middle">滑到之前就已经判完了</text>
+
+  <!-- ═══════════════ 箭头 ②→③ ═══════════════ -->
+  <g filter="url(#sk2)">
+    <path class="s-blue" d="M512 356 C536 340 578 340 610 356" stroke-width="4"
+          stroke-linecap="round" marker-end="url(#ah)" />
+  </g>
+
+  <!-- ═══════════════ ③ Jev 模型（云 + 机器人） ═══════════════ -->
+  <text class="title ink" x="690" y="222" font-size="24" text-anchor="middle">Jev 模型</text>
+  <text class="hw muted" x="690" y="248" font-size="17" text-anchor="middle">接口你自己配，密钥你拿着</text>
+  <g filter="url(#sk)">
+    <path class="s-ink" stroke-width="3.6" stroke-linejoin="round"
+          d="M636 392 C610 392 596 374 600 354 C604 334 622 324 640 328
+             C644 300 668 284 694 288 C718 292 734 310 736 332
+             C760 328 782 342 784 364 C786 384 772 400 750 400
+             Z" />
+    <circle cx="690" cy="352" r="31" class="s-blue" stroke-width="3.4" />
+    <circle cx="679" cy="347" r="3.8" class="blue" />
+    <circle cx="701" cy="347" r="3.8" class="blue" />
+    <path class="s-blue" d="M677 364 C684 371 696 371 703 364" stroke-width="3" stroke-linecap="round" />
+    <path class="s-blue" d="M690 321 V310" stroke-width="3" stroke-linecap="round" />
+    <circle cx="690" cy="306" r="4.2" class="blue" />
+  </g>
+  <text class="hw muted" x="690" y="504" font-size="17" text-anchor="middle">吐出两个数</text>
+  <text class="hw blue" x="690" y="528" font-size="17" text-anchor="middle">农场度 0~4 · 置信度 0~1</text>
+
+  <!-- ═══════════════ 箭头 ③→④ ═══════════════ -->
+  <g filter="url(#sk2)">
+    <path class="s-blue" d="M792 356 C816 340 850 340 874 356" stroke-width="4"
+          stroke-linecap="round" marker-end="url(#ah)" />
+  </g>
+
+  <!-- ═══════════════ ④ 悬浮横幅 + 记录 ═══════════════ -->
+  <text class="title ink" x="1090" y="222" font-size="24" text-anchor="middle">悬浮横幅 + 记录页</text>
+  <text class="hw muted" x="1090" y="248" font-size="17" text-anchor="middle">横幅停 1.8~3 秒，不挡你滑动</text>
+  <g filter="url(#sk)">
+    <!-- 悬浮横幅 -->
+    <rect x="880" y="266" width="420" height="70" rx="14" class="s-ink" stroke-width="3.4" />
+    <circle cx="918" cy="301" r="11" class="red" />
+    <path class="s-ink" d="M944 292 H1034 M944 311 H986" stroke-width="2.8" stroke-linecap="round" />
+    <rect x="1064" y="281" width="118" height="40" rx="20" class="s-ink" stroke-width="2.8" />
+    <path class="s-ink" d="M1086 301 H1140" stroke-width="2.6" stroke-linecap="round" />
+
+    <!-- 三档语义胶囊 -->
+    <rect x="880" y="352" width="132" height="44" rx="22" fill="#DC2626" opacity="0.08" />
+    <rect x="880" y="352" width="132" height="44" rx="22" class="s-ink" stroke-width="2.8" />
+    <circle cx="905" cy="374" r="6.6" class="red" />
+    <text class="hw red" x="956" y="381" font-size="17" text-anchor="middle">营销号 · 划走</text>
+
+    <rect x="1024" y="352" width="132" height="44" rx="22" fill="#EAB308" opacity="0.11" />
+    <rect x="1024" y="352" width="132" height="44" rx="22" class="s-ink" stroke-width="2.8" />
+    <circle cx="1049" cy="374" r="6.6" class="amber" />
+    <text class="hw" x="1100" y="381" font-size="17" text-anchor="middle" fill="#7A6E1C">存疑 · 仅提示</text>
+
+    <rect x="1168" y="352" width="132" height="44" rx="22" fill="#006400" opacity="0.09" />
+    <rect x="1168" y="352" width="132" height="44" rx="22" class="s-ink" stroke-width="2.8" />
+    <circle cx="1193" cy="374" r="6.6" class="green" />
+    <text class="hw green" x="1244" y="381" font-size="17" text-anchor="middle">正常 · 放行</text>
+
+    <!-- 记录小卡 -->
+    <rect x="880" y="414" width="420" height="56" rx="12" class="s-soft" stroke-width="2.8" />
+    <path class="s-soft" d="M902 434 H1150 M902 452 H1050" stroke-width="2.4" stroke-linecap="round" />
+    <text class="hw muted" x="1252" y="448" font-size="17" text-anchor="middle">记录页</text>
+  </g>
+  <text class="hw muted" x="1090" y="504" font-size="17" text-anchor="middle">只提醒，永不自动操作你的手机</text>
+  <text class="hw blue" x="1090" y="528" font-size="17" text-anchor="middle">记录只存本机，最多 300 条</text>
+
+  <!-- 小人 B：站在最右边看横幅 -->
+  <use href="#blob" x="1340" y="440" filter="url(#sk2)" />
+
+  <!-- ═══════════════ 底部：四条硬承诺 ═══════════════ -->
+  <g filter="url(#sk2)">
+    <path class="s-soft" d="M72 566 H1368" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" />
+  </g>
+  <g class="title" font-size="21">
+    <text class="blue" x="180" y="618" text-anchor="middle">不 root · 不破解</text>
+    <text class="blue" x="560" y="618" text-anchor="middle">不调B站任何接口</text>
+    <text class="blue" x="940" y="618" text-anchor="middle">零遥测 · 零第三方 SDK</text>
+    <text class="blue" x="1300" y="618" text-anchor="middle">绝不替你操作</text>
+  </g>
+  <g fill="#C0C6CE" filter="url(#sk2)">
+    <circle cx="372" cy="611" r="3.4" />
+    <circle cx="752" cy="611" r="3.4" />
+    <circle cx="1112" cy="611" r="3.4" />
+  </g>
+
+</svg>
+</body>
+</html>
