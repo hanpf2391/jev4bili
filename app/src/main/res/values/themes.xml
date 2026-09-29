@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.BiliGate" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorPrimaryContainer">@color/blue_container</item>
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/bg_page</item>
+        <item name="colorError">@color/danger_red</item>
+    </style>
+
+    <!-- 卡片：白底 + 1dp #E0E2E6 发丝边 + 16dp 圆角 + 无投影（.card 契约） -->
+    <style name="BiliGateCard" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/card_surface</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+
+    <!-- Hero 卡：24dp 圆角 + 蓝调阴影（radius-lg + elev-raised） -->
+    <style name="HeroCard" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/card_surface</item>
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="contentPadding">18dp</item>
+    </style>
+
+    <!-- 分区标题：mono eyebrow（section-label：12px / 0.12em 字距 / muted） -->
+    <style name="SectionTitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.12</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+</resources>

@@ -1,0 +1,12 @@
+*.apk
+*.aab
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+.cxx/
+.DS_Store
+app/src/main/assets/*.bin

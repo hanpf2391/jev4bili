@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <!-- 设计稿品牌盾：描边盾形 + 行动蓝播放三角 -->
+    <path android:pathData="M12,2.4 L20,5.2 v5.6 c0,5.3 -3.3,9 -8,10.8 c-4.7,-1.8 -8,-5.5 -8,-10.8 V5.2 Z"
+        android:strokeColor="@color/fg2" android:strokeWidth="1.7" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:pathData="M10,8.6 v6.8 l5.6,-3.4 Z" android:fillColor="@color/primary"/>
+</vector>

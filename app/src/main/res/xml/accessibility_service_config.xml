@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged|typeViewScrolled"
+    android:accessibilityFlags="flagRetrieveInteractiveWindows|flagReportViewIds"
+    android:packageNames="tv.danmaku.bili,tv.danmaku.bili.blue"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:notificationTimeout="300"
+    android:canRetrieveWindowContent="true"
+    android:canPerformGestures="true"
+    android:description="@string/accessibility_desc" />

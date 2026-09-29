@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- v0.9.5 逐像素复刻 OpenDesign 样式.css token 契约 -->
+    <!-- Surface：整页纯白画布（surface-warm=alias of surface） -->
+    <color name="bg_page">#FFFFFF</color>
+    <color name="canvas">#FFFFFF</color>
+    <color name="card_surface">#FFFFFF</color>
+
+    <!-- Foreground -->
+    <color name="text_primary">#181D26</color>      <!-- fg -->
+    <color name="text_secondary">#525C6B</color>    <!-- muted: rgba(4,14,32,.69) on white -->
+    <color name="fg2">#333333</color>               <!-- 二级正文 -->
+
+    <!-- Border -->
+    <color name="divider">#E0E2E6</color>           <!-- border -->
+    <color name="border_soft">#EEF0F3</color>       <!-- 内分隔线 -->
+
+    <!-- Accent / 语义 -->
+    <color name="primary">#1B61C9</color>
+    <color name="primary_light">#E8F0FC</color>     <!-- accent 12% on white -->
+    <color name="accent_green">#006400</color>      <!-- success -->
+    <color name="warn_yellow">#EAB308</color>
+    <color name="warn_text">#7A6E1C</color>         <!-- color-mix(warn, fg 52%) 近似 -->
+    <color name="warn_container">#FCF3D9</color>    <!-- warn 15% on white -->
+    <color name="danger_red">#DC2626</color>
+    <color name="bili_pink">#FB7299</color>
+
+    <!-- 容器/胶囊（color-mix 换算） -->
+    <color name="pill_bg_ok">#E6EFE6</color>        <!-- success 12% -->
+    <color name="pill_bg_off">#F0F1F4</color>       <!-- fg 7% -->
+    <color name="green_container">#E6EFE6</color>
+    <color name="red_container">#FBE9E9</color>     <!-- danger 10% -->
+    <color name="blue_container">#E8F0FC</color>
+    <color name="chip_active">#181D26</color>       <!-- 筛选chip选中=深夜蓝底 -->
+    <color name="bar_idle">#E4E5E8</color>          <!-- 柱图非今日 fg10% -->
+    <color name="scan_line">#EAF1FC</color>         <!-- accent 8% 渐变近似 -->
+</resources>

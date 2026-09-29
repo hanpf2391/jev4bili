@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_home" android:icon="@drawable/ic_nav_guard" android:title="守门" />
+    <item android:id="@+id/nav_records" android:icon="@drawable/ic_nav_records" android:title="记录" />
+    <item android:id="@+id/nav_settings" android:icon="@drawable/ic_nav_settings" android:title="设置" />
+</menu>

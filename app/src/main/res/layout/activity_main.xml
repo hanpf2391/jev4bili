@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- v0.9.3 商业化重构：顶部品牌头 + 三页切换（守门/记录/设置）+ 底部导航 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/bg_page">
+
+    <!-- ===== 品牌头（设计稿 app-header：盾牌+名称 | 状态胶囊右置） ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="14dp">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_brand_shield"
+            android:contentDescription="JEV4Bili 图标" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:text="JEV4Bili"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+
+        <TextView
+            android:id="@+id/svcState"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:background="@drawable/pill_bg_ok"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="● 守护中" />
+    </LinearLayout>
+
+    <!-- ===== 三页容器（visibility 切换，接线零破坏） ===== -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <include android:id="@+id/pageHome" layout="@layout/page_home"
+            android:visibility="visible" />
+
+        <include android:id="@+id/pageRecords" layout="@layout/page_records"
+            android:visibility="gone" />
+
+        <include android:id="@+id/pageSettings" layout="@layout/page_settings"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <!-- ===== 底部导航 ===== -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/canvas"
+        app:itemIconTint="@color/primary"
+        app:itemTextColor="@color/primary"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav" />
+</LinearLayout>

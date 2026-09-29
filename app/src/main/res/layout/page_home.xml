@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- v0.9.5 首页逐像素复刻：Hero(48sp大数字+扫描线+图例+7天柱图) + 实时守护(2x2) + 三步引导(图标+进度线) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    android:background="@color/bg_page">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="20dp">
+
+        <!-- ═══ Hero 战绩卡（radius 24 + 扫描线） ═══ -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/HeroCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- 扫描线（accent 8% 渐变，代码驱动 5.6s 循环） -->
+                <View
+                    android:id="@+id/scanLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_scan_line"
+                    android:visibility="invisible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/fg2"
+                            android:text="今日已拦截" />
+
+                        <TextView
+                            android:id="@+id/heroDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:fontFamily="monospace"
+                            android:textColor="@color/text_secondary"
+                            android:text="09.29 周二" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="bottom"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:id="@+id/heroCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="48sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:text="0" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            android:textColor="@color/fg2"
+                            android:text="条垃圾内容" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/stats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:text="今日判定 0 条 · 已拉黑 0 个UP" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="14dp">
+
+                        <TextView android:id="@+id/legendBlock" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:layout_marginEnd="14dp"
+                            android:textSize="14sp" android:textColor="@color/fg2"
+                            android:drawableStart="@drawable/dot_danger" android:drawablePadding="6dp"
+                            android:gravity="center_vertical" android:text="营销号 0" />
+
+                        <TextView android:id="@+id/legendSus" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:layout_marginEnd="14dp"
+                            android:textSize="14sp" android:textColor="@color/fg2"
+                            android:drawableStart="@drawable/dot_warn" android:drawablePadding="6dp"
+                            android:gravity="center_vertical" android:text="存疑 0" />
+
+                        <TextView android:id="@+id/legendPass" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="14sp"
+                            android:textColor="@color/fg2" android:drawableStart="@drawable/dot_brand"
+                            android:drawablePadding="6dp" android:gravity="center_vertical"
+                            android:text="放行 0" />
+                    </LinearLayout>
+
+                    <!-- 近 7 天柱图（真数据：按记录日期分桶） -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="bottom"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="7dp">
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:textSize="14sp"
+                            android:textColor="@color/text_secondary" android:text="近 7 天拦截" />
+                        <TextView android:id="@+id/barsTotal" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="12sp"
+                            android:fontFamily="monospace" android:textColor="@color/text_secondary"
+                            android:text="合计 0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:orientation="horizontal">
+
+                        <View android:id="@+id/bar1" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar2" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar3" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar4" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar5" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar6" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:layout_marginEnd="3dp" android:background="@drawable/bar_idle" />
+                        <View android:id="@+id/bar7" android:layout_width="0dp" android:layout_height="4dp"
+                            android:layout_weight="1" android:background="@drawable/bar_today" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="7dp">
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="三" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="四" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="五" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="六" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="日" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textColor="@color/text_secondary" android:text="一" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:gravity="center" android:textSize="12sp"
+                            android:textStyle="bold" android:textColor="@color/primary" android:text="二" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══ 实时守护（2x2 数据格） ═══ -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/BiliGateCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View android:layout_width="9dp" android:layout_height="9dp"
+                        android:background="@drawable/dot_live" android:layout_marginEnd="9dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:text="正在监听 哔哩哔哩" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:text="视频滑入屏幕即完成判定，不打断滑动" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPause"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:minWidth="0dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="暂停守护" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="10dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textSize="12sp" android:textColor="@color/text_secondary" android:text="今日已扫描" />
+                            <TextView android:id="@+id/statScanned" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                                android:textSize="20sp" android:textStyle="bold" android:textColor="@color/text_primary" android:text="0" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textSize="12sp" android:textColor="@color/text_secondary" android:text="平均判定耗时" />
+                            <TextView android:id="@+id/statAvg" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                                android:textSize="20sp" android:textStyle="bold" android:textColor="@color/text_primary" android:text="-" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textSize="12sp" android:textColor="@color/text_secondary" android:text="判定引擎" />
+                            <TextView android:id="@+id/statEngine" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                                android:textSize="20sp" android:textStyle="bold" android:textColor="@color/text_primary" android:text="Jev" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textSize="12sp" android:textColor="@color/text_secondary" android:text="已拉黑UP" />
+                            <TextView android:id="@+id/statBlack" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                                android:textSize="20sp" android:textStyle="bold" android:textColor="@color/text_primary" android:text="0" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══ 完成 3 步（图标行 + 进度线） ═══ -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/BiliGateCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:text="完成 3 步，守护更稳" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:text="权限只在判定时使用，不上传屏幕内容" />
+
+                <!-- 步骤 1 -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:layout_marginTop="12dp" android:paddingTop="11dp" android:paddingBottom="11dp">
+                    <TextView android:id="@+id/stepIco1" android:layout_width="34dp" android:layout_height="34dp"
+                        android:gravity="center" android:textSize="16sp" android:textStyle="bold"
+                        android:background="@drawable/step_todo" android:text="1" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="12dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/text_primary" android:text="屏幕识别权限" />
+                        <TextView android:id="@+id/rowA11y" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textSize="14sp"
+                            android:textColor="@color/text_secondary" android:text="无障碍服务，读取当前视频的标题与数据" />
+                    </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenA11y"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="wrap_content" android:layout_height="44dp"
+                        android:minWidth="0dp" android:paddingStart="14dp" android:paddingEnd="14dp"
+                        android:text="去开启" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border_soft" />
+
+                <!-- 步骤 2 -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:paddingTop="11dp" android:paddingBottom="11dp">
+                    <TextView android:id="@+id/stepIco2" android:layout_width="34dp" android:layout_height="34dp"
+                        android:gravity="center" android:textSize="16sp" android:textStyle="bold"
+                        android:background="@drawable/step_todo" android:text="2" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="12dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/text_primary" android:text="服务连接" />
+                        <TextView android:id="@+id/rowConn" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textSize="14sp"
+                            android:textColor="@color/text_secondary" android:text="开关已开但未连上时，关一下再开" />
+                    </LinearLayout>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border_soft" />
+
+                <!-- 步骤 3 -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:paddingTop="11dp" android:paddingBottom="11dp">
+                    <TextView android:id="@+id/stepIco3" android:layout_width="34dp" android:layout_height="34dp"
+                        android:gravity="center" android:textSize="16sp" android:textStyle="bold"
+                        android:background="@drawable/step_todo" android:text="3" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="12dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/text_primary" android:text="判断密钥" />
+                        <TextView android:id="@+id/rowKey" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textSize="14sp"
+                            android:textColor="@color/text_secondary" android:text="填自己的 Jev Key，费用走你的账户" />
+                    </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGotoKey"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="wrap_content" android:layout_height="44dp"
+                        android:minWidth="0dp" android:paddingStart="14dp" android:paddingEnd="14dp"
+                        android:text="去填写" />
+                </LinearLayout>
+
+                <!-- 进度线 -->
+                <LinearLayout android:id="@+id/progressBar" android:layout_width="match_parent"
+                    android:layout_height="4dp" android:orientation="horizontal"
+                    android:background="@drawable/bar_idle" android:layout_marginTop="12dp">
+                    <View android:id="@+id/progressFill" android:layout_width="0dp"
+                        android:layout_height="match_parent" android:layout_weight="0"
+                        android:background="@color/primary" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══ 保活指南 ═══ -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/BiliGateCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:text="保活指南（小米 / HyperOS）" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/fg2"
+                    android:text="· 自启动 + 省电策略无限制（否则后台被冻结）" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAppSettings"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="8dp"
+                    android:text="去应用设置（自启动 / 省电）" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/fg2"
+                    android:text="· 防划掉：最近任务长按卡片 → 点锁图标" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

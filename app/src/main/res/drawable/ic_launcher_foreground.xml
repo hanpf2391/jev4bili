@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- JEV4Bili：白描边盾 + 行动蓝播放三角（品牌盾 ic_brand_shield 放大居中版） -->
+    <path android:pathData="M54,29 L74.8,36.3 V50.9 c0,13.8 -8.6,23.4 -20.8,28.1 c-12.2,-4.7 -20.8,-14.3 -20.8,-28.1 V36.3 Z"
+        android:strokeColor="#FFFFFF" android:strokeWidth="4.4" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:pathData="M48.8,45.2 v17.7 l14.6,-8.8 Z" android:fillColor="#1B61C9"/>
+</vector>

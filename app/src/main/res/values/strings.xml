@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JEV4Bili</string>
+    <string name="accessibility_label">JEV4Bili（营销号过滤）</string>
+    <string name="accessibility_desc">仅通过Android无障碍服务读取B站竖屏流卡片上公开展示的标题、UP主名与互动数字，送用户自己配置的Jev端点判断是否营销号并弹横幅提示。不调用B站任何接口，不自动操作手机，不收集上传任何数据，仅在B站应用内生效。</string>
+    <!-- 仓库地址：建仓后把 your-github 换成你的 GitHub 用户名 -->
+    <string name="repo_url">https://github.com/hanpf2391/jev4bili</string>
+    <string name="privacy_policy">JEV4Bili 隐私策略\n\n1. 我们不收集任何数据。本应用无遥测、无统计、无崩溃上报、无第三方SDK。\n\n2. 无障碍数据的去向：无障碍服务仅在B站竖屏流界面读取当前卡片上公开展示的文本（标题/UP主名/互动数字），用于在本地生成判定请求。屏幕内容不落盘、不截图、不上传。\n\n3. 判定请求（BYOK）：卡片文本会发送到你自己配置的 Jev API 端点（默认 api.typesafe.ai，密钥由你在设置页填写）。请求经由你的密钥直达该端点，不经过任何中间服务器，本应用作者看不到任何内容。不想发送任何数据的用户可不填密钥，应用将只做本地记录、不做AI判定。\n\n4. 本地存储：判定历史仅保存在你的手机应用私有目录（最多300条），清空记录后不可恢复，也不会离开你的设备。\n\n5. 权限说明：无障碍权限用于读取屏幕卡片文本；除此之外应用不申请任何敏感权限。\n\n6. 开源：全部代码在 GitHub 公开（见设置页仓库地址），可自行审计。\n\n本策略适用于所有版本。若有疑问请在仓库 Issues 提出。</string>
+</resources>
