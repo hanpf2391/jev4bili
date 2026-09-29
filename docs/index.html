@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JEV4Bili · B站刷流守门员 — 让 feed 只剩原创真诚内容</title>
+<meta name="description" content="刷B站「看看」竖屏流时，用你自己配置的 Jev 模型实时判断农场内容，弹横幅提醒你划走。纯无障碍方案：不 root、不破解、不调用 B 站任何接口、永不自动操作你的手机。">
+<meta name="theme-color" content="#1B61C9">
+<meta property="og:title" content="JEV4Bili · B站刷流守门员">
+<meta property="og:description" content="读屏上公开的文字，替你判一条「值不值得看」。纯无障碍方案，零遥测，密钥你自己拿。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="banner.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B61C9'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#181D26; --muted:#525C6B; --border:#E0E2E6; --soft:#EEF0F3;
+  --primary:#1B61C9; --primary-light:#E8F0FC;
+  --green:#006400; --green-bg:#E6EFE6;
+  --amber:#EAB308; --amber-text:#7A6E1C; --amber-bg:#FCF3D9;
+  --red:#DC2626; --red-bg:#FEF2F2;
+  --pink:#FB7299;
+  --maxw:1080px; --r:14px;
+  --shadow:0 1px 2px rgba(24,29,38,.05), 0 8px 24px -12px rgba(24,29,38,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font:16px/1.65 'Helvetica Neue',Helvetica,Arial,'PingFang SC','Noto Sans CJK SC','Microsoft YaHei','Microsoft JhengHei','SimHei',sans-serif;
+  color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;height:auto}
+a{color:var(--primary)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:16px;top:16px;background:#fff;padding:10px 16px;border:1px solid var(--border);border-radius:8px;z-index:99}
+:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+
+/* ── 导航 ── */
+header.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:saturate(1.6) blur(10px);border-bottom:1px solid var(--soft)}
+.nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.brand svg{flex:none}
+.nav nav{display:flex;gap:22px;margin-left:auto}
+.nav nav a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500}
+.nav nav a:hover{color:var(--primary)}
+@media(max-width:760px){.nav nav{display:none}}
+
+/* ── 按钮 ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid transparent;transition:.15s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#17539f}
+.btn-ghost{border-color:var(--border);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+
+/* ── Hero ── */
+.hero{padding:72px 0 8px;text-align:center}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:26px}
+.tag{font-size:12.5px;font-weight:600;color:var(--muted);background:var(--soft);padding:5px 12px;border-radius:999px}
+.tag.on{background:var(--green-bg);color:var(--green)}
+h1{font-size:clamp(30px,5vw,50px);line-height:1.16;letter-spacing:-.025em;font-weight:800}
+h1 em{font-style:normal;color:var(--primary)}
+.lede{margin:20px auto 0;max-width:640px;font-size:clamp(16px,2.1vw,18.5px);color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:32px}
+.promises{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;margin-top:26px;font-size:13.5px;color:var(--muted)}
+.promises span::before{content:"✓";color:var(--green);font-weight:800;margin-right:6px}
+
+.shot{margin:52px auto 0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+
+/* ── 通用 section ── */
+section{padding:76px 0}
+section.alt{background:#FAFBFC;border-top:1px solid var(--soft);border-bottom:1px solid var(--soft)}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+h2{font-size:clamp(23px,3.2vw,32px);letter-spacing:-.02em;line-height:1.25;font-weight:800}
+.sub{margin-top:12px;color:var(--muted);max-width:660px;font-size:16px}
+
+/* ── 卡片网格 ── */
+.grid{display:grid;gap:18px;margin-top:34px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.card .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;margin-bottom:14px;font-size:19px;background:var(--primary-light)}
+.card h3{font-size:16.5px;margin-bottom:7px;letter-spacing:-.01em}
+.card p{font-size:14.5px;color:var(--muted);line-height:1.62}
+
+/* 判定分级 */
+.tier{display:flex;gap:16px;align-items:flex-start;padding:20px;border:1px solid var(--border);border-radius:var(--r);background:#fff}
+.tier .dot{width:11px;height:11px;border-radius:50%;flex:none;margin-top:8px}
+.tier.red{background:var(--red-bg);border-color:#FBD5D5}
+.tier.amber{background:var(--amber-bg);border-color:#F5E4B8}
+.tier.green{background:var(--green-bg);border-color:#CFE0CF}
+.tier h3{font-size:16px;margin-bottom:5px}
+.tier p{font-size:14px;color:var(--muted)}
+.tier code{background:rgba(255,255,255,.75);padding:1px 6px;border-radius:5px;font-size:13px}
+
+/* 步骤 */
+.step{display:flex;gap:16px;align-items:flex-start}
+.step .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+.step h3{font-size:16px;margin-bottom:5px}
+.step p{font-size:14.5px;color:var(--muted)}
+
+/* 截图 */
+.screens{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:34px}
+@media(max-width:640px){.screens{grid-template-columns:1fr}}
+.screens figure{margin:0}
+.screens img{border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.screens figcaption{margin-top:10px;text-align:center;font-size:13.5px;color:var(--muted);font-weight:500}
+
+/* 折叠 FAQ */
+details{border:1px solid var(--border);border-radius:var(--r);padding:0 20px;margin-bottom:10px;background:#fff}
+details[open]{border-color:#CBD8EE;background:#FCFDFF}
+summary{cursor:pointer;padding:17px 0;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--primary);font-weight:800;font-size:20px;flex:none;transition:.2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 18px;color:var(--muted);font-size:15px;line-height:1.72}
+
+/* 数据流向表 */
+.flow{width:100%;border-collapse:collapse;margin-top:26px;font-size:14.5px}
+.flow th,.flow td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--soft)}
+.flow th{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;background:#FAFBFC}
+.flow td:last-child{white-space:nowrap;font-weight:600}
+.yes{color:var(--amber-text)}
+.no{color:var(--green)}
+
+footer{background:#FAFBFC;border-top:1px solid var(--soft);padding:52px 0 40px;font-size:14px;color:var(--muted)}
+footer h4{font-size:14px;color:var(--ink);margin-bottom:12px;font-weight:700}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:34px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr}}
+footer ul{list-style:none;display:grid;gap:9px}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--primary)}
+.copy{margin-top:34px;padding-top:22px;border-top:1px solid var(--border);font-size:13px;line-height:1.7}
+.copy code{background:var(--soft);padding:1.5px 6px;border-radius:5px}
+
+@media (prefers-reduced-motion:reduce){.motion{display:none}}
+.motion-static{display:none}
+@media (prefers-reduced-motion:reduce){.motion-static{display:block}}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="7" fill="#1B61C9"/>
+        <path d="M9 16.5l4.5 4.5L23 11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      JEV4Bili
+    </a>
+    <nav>
+      <a href="#problem">解决什么</a>
+      <a href="#how">怎么工作</a>
+      <a href="#start">快速开始</a>
+      <a href="#privacy">隐私</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero wrap" style="padding-bottom:0">
+  <div class="tags">
+    <span class="tag on">v0.11.1</span>
+    <span class="tag">Android 8.0+</span>
+    <span class="tag">GPL-3.0 开源</span>
+    <span class="tag">BYOK 你的密钥</span>
+  </div>
+  <h1>让 feed 只剩<br><em>原创真诚的内容</em></h1>
+  <p class="lede">
+    刷 B 站「看看」竖屏流时，用你自己配置的 Jev 模型实时判断农场内容，弹横幅提醒你划走。
+    判断只读屏幕上你本来就看得见的那几个字。
+  </p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/hanpf2391/jev4bili/releases">下载 APK</a>
+    <a class="btn btn-ghost" href="https://github.com/hanpf2391/jev4bili">查看源码</a>
+  </div>
+  <div class="promises">
+    <span>不 root · 不破解</span>
+    <span>不调用 B 站任何接口</span>
+    <span>零遥测 · 零第三方 SDK</span>
+    <span>永不自动操作你的手机</span>
+  </div>
+  <div class="shot"><img src="banner.png" alt="JEV4Bili — Jev 驱动的 B 站刷流守门员"></div>
+</section>
+
+<section id="problem" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">它解决什么问题</p>
+    <h2>竖屏流里混着大量以流量变现为目的的批量内容</h2>
+    <p class="sub">本项目采用<strong>宽口径</strong>定义，以下四类全部算「营销号」。</p>
+    <div class="grid g4">
+      <div class="card"><div class="ico">📦</div><h3>搬运缝合</h3><p>搬运+剪辑他人素材量产，蹭流量分成。<br><span style="color:#8A929E">影视解说号、风景合集号</span></p></div>
+      <div class="card"><div class="ico">🏭</div><h3>量产矩阵</h3><p>一个团队 N 个号批量铺内容。<br><span style="color:#8A929E">短剧号、文案号、默认名小号</span></p></div>
+      <div class="card"><div class="ico">🎣</div><h3>标题党引流</h3><p>骗点击换流量，内容与标题错配。<br><span style="color:#8A929E">「看到最后…」「99% 的人不知道」</span></p></div>
+      <div class="card"><div class="ico">🛒</div><h3>卖货导流</h3><p>硬广软广、卖课、微信/公众号导流。<br><span style="color:#8A929E">评论区看全集、签名挂联系方式</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow">它怎么工作</p>
+    <h2>读屏上公开的文字，替你判一条「值不值得看」</h2>
+    <p class="sub">四步流水线。截图与屏幕内容全程不出本机，只有卡片上那几个字会发往<strong>你自己配置</strong>的端点。</p>
+    <div class="shot" style="margin-top:34px">
+      <img class="motion" src="how-it-works.gif" alt="B站「看看」竖屏流 → 安卓无障碍服务读屏 → Jev 模型判定 → 悬浮横幅与记录页；虚线容器标出「本机」边界，只有 Jev 端点在外">
+      <img class="motion-static" src="how-it-works.png" alt="B站「看看」竖屏流 → 安卓无障碍服务读屏 → Jev 模型判定 → 悬浮横幅与记录页">
+    </div>
+  </div>
+</section>
+
+<section id="verdicts" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">判定分级</p>
+    <h2>三档结果，拦住该拦的，放过该放的</h2>
+    <p class="sub">误杀比漏判更烦人，所以中间留了一档「存疑」——只提示，不打扰。</p>
+    <div class="grid g3">
+      <div class="tier red"><span class="dot" style="background:var(--red)"></span><div><h3>营销号 · 建议划走</h3><p>农场度 ≥ 阈值，横幅停 <code>3 秒</code></p></div></div>
+      <div class="tier amber"><span class="dot" style="background:var(--amber)"></span><div><h3>存疑 · 仅提示</h3><p>农场度超线但置信不足，停 <code>2.4 秒</code>，不打扰</p></div></div>
+      <div class="tier green"><span class="dot" style="background:var(--green)"></span><div><h3>正常 · 放行</h3><p>停 <code>1.8 秒</code>，不挡你滑动</p></div></div>
+    </div>
+    <p class="sub" style="margin-top:22px">横幅里 <strong>味</strong> = 农场度 0~4（4 = 纯农场量产），<strong>信</strong> = 模型置信度 0~1。全部判定历史可在「记录」页回看、导出。</p>
+  </div>
+</section>
+
+<section id="screens">
+  <div class="wrap">
+    <p class="eyebrow">界面</p>
+    <h2>三个页面，够用</h2>
+    <div class="screens">
+      <figure><img src="screenshots/home.png" alt="守门页：本轮判定统计与实时状态" loading="lazy"><figcaption>守门</figcaption></figure>
+      <figure><img src="screenshots/records.png" alt="记录页：全部判定历史，可回看可导出" loading="lazy"><figcaption>记录</figcaption></figure>
+      <figure><img src="screenshots/settings.png" alt="设置页：密钥配置、判定灵敏度、黑白名单" loading="lazy"><figcaption>设置</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="start" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">快速开始</p>
+    <h2>三步，两分钟</h2>
+    <div class="grid g3">
+      <div class="card"><div class="step"><span class="n">1</span><div><h3>装 APK</h3><p>从 GitHub Releases 下载安装，允许未知来源即可。</p></div></div></div>
+      <div class="card"><div class="step"><span class="n">2</span><div><h3>开无障碍</h3><p>设置 → 无障碍 → 已下载应用 → JEV4Bili，打开开关。</p></div></div></div>
+      <div class="card"><div class="step"><span class="n">3</span><div><h3>填你自己的密钥</h3><p>App 设置页填 Jev API Key。不填也能用，只做本地记录、不做 AI 判定。</p></div></div></div>
+    </div>
+    <p class="sub" style="margin-top:26px">
+      <strong>BYOK：你的密钥，你的额度。</strong>判定请求直达 Jev 端点，不经过任何中间服务器，作者看不到、也收不到任何内容。
+    </p>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">隐私</p>
+    <h2>一句话：不收集任何数据</h2>
+    <p class="sub">零遥测、零统计、零崩溃上报、零广告、零第三方 SDK。以下是全部数据流向。</p>
+    <table class="flow">
+      <thead><tr><th>数据</th><th>去向</th><th>离开设备？</th></tr></thead>
+      <tbody>
+        <tr><td>竖屏流卡片文本<br><span style="color:#8A929E;font-size:13px">标题 / UP主名 / 互动数字</span></td><td>生成判定请求 → 你自己配置的 Jev 端点</td><td class="yes">是（仅此一项，且可关）</td></tr>
+        <tr><td>判定历史（最多 300 条）</td><td>手机应用私有目录</td><td class="no">否</td></tr>
+        <tr><td>设置（密钥 / 开关）</td><td>手机应用私有目录</td><td class="no">否</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:24px">
+      屏幕内容<strong>不截图、不录音、不落盘</strong>；无障碍服务只在 B 站竖屏流界面读取当前卡片上公开展示的文本。
+      不填密钥即完全不发送任何数据。详见 <a href="https://github.com/hanpf2391/jev4bili/blob/main/PRIVACY.md">PRIVACY.md</a>。
+    </p>
+  </div>
+</section>
+
+<section id="faq" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">常见问题</p>
+    <h2>看之前，先看这六条</h2>
+    <div style="margin-top:28px">
+      <details open><summary>会被 B 站封号吗？</summary><p>不会。不调用 B 站任何接口、不修改客户端，也不注入进程，只是读屏幕上你本来就看得见的那几个字——和你看屏幕没什么区别。</p></details>
+      <details><summary>要 root 吗？要装 Xposed 吗？</summary><p>都不用。纯无障碍方案，装完开一个无障碍开关就能用——不破解、不改机、不动系统，也不要任何特殊权限；关掉开关就彻底停下。</p></details>
+      <details><summary>它能看到我的隐私吗？</summary><p>看不到。不截图、不读视频内容，只拿卡片上那几个字；零遥测、零第三方 SDK，代码全摆在 GitHub 上，随你查。</p></details>
+      <details><summary>费电吗？</summary><p>约 1.8%/时，只在你刷 B 站的时候工作。主页「后台耗电」那一栏就是它自己报的数；不放心的话，把守护暂停掉就一点都不耗了。</p></details>
+      <details><summary>判不准怎么办？</summary><p>两个旋钮：「判定灵敏度」滑杆往右更严；单个 UP 主可加白名单／黑名单。同一 UP 主的判定会累积成本地画像，越用越准。</p></details>
+      <details><summary>要花钱吗？</summary><p>App 本身免费开源（GPL-3.0）。判定用的是你自己的 Jev 密钥，费用直接付给接口方，作者不经手、也看不到你的内容。</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow">反馈</p>
+    <h2>误判 / 漏判，直接说</h2>
+    <p class="sub">
+      优先走 <a href="https://github.com/hanpf2391/jev4bili/issues">GitHub Issues</a> —— 贴上 App 设置页「复制诊断信息」的输出，再附上你觉得该判成什么。
+      你的反馈也会帮到遇到同样问题的人。
+    </p>
+    <p class="sub" style="margin-top:14px">不习惯公开讨论的，可以走微信 <code style="background:var(--soft);padding:2px 7px;border-radius:5px">pengfei6017</code>，或邮箱 <a href="mailto:hpengfei0@gmail.com">hpengfei0@gmail.com</a>。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h4>JEV4Bili</h4>
+        <p style="font-size:13.5px;line-height:1.7">B站刷流守门员。本项目与哔哩哔哩及 Jev 官方均无关，系非官方项目；AI 判定不保证准确，结果仅供参考。</p>
+      </div>
+      <div>
+        <h4>文档</h4>
+        <ul>
+          <li><a href="https://github.com/hanpf2391/jev4bili#readme">README</a></li>
+          <li><a href="https://github.com/hanpf2391/jev4bili/blob/main/PRIVACY.md">隐私策略</a></li>
+          <li><a href="https://github.com/hanpf2391/jev4bili/blob/main/DISCLAIMER.md">免责声明</a></li>
+          <li><a href="https://github.com/hanpf2391/jev4bili/blob/main/NOTICE">NOTICE</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>许可</h4>
+        <ul>
+          <li><a href="https://github.com/hanpf2391/jev4bili/blob/main/LICENSE">GPL-3.0</a> — 可商用</li>
+          <li><a href="https://github.com/hanpf2391/jev4bili/releases">下载 APK</a></li>
+          <li><a href="diagram/jev4bili-flow.html">交互式架构图</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">
+      Copyright © 2026 hanpf2391 与 JEV4Bili 贡献者。代码以 GPL-3.0 授权。<br>
+      衍生作品须同样以 GPL-3.0 开源并提供完整对应源码；不得使用「JEV4Bili」名称或标识暗示由原作者出品或背书。
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
