@@ -122,3 +122,17 @@ jobs:
 
             📖 官网 <https://hanpf2391.github.io/jev4bili/> · 源码 <https://github.com/hanpf2391/jev4bili>
           generate_release_notes: true
+
+      # 把 APK 镜像到官网（GitHub Pages）：国内访问 github.com 不稳，但页面所在的
+      # github.io 通常可达；落地页下载按钮指向本站直链 JEV4Bili-latest.apk
+      - name: 镜像 APK 到官网
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir -p docs/releases
+          cp "${{ steps.artifact.outputs.name }}" docs/releases/JEV4Bili-latest.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/releases/JEV4Bili-latest.apk
+          git commit -m "chore: 官网镜像 APK ${{ github.ref_name }}"
+          git pull --rebase origin main
+          git push
