@@ -44,6 +44,10 @@ object Prefs {
     fun customApiBase(ctx: Context): String = sp(ctx).getString("api_base", "") ?: ""
     fun setCustomApiBase(ctx: Context, v: String) = sp(ctx).edit().putString("api_base", v).apply()
 
+    /** v0.11.0 判定灵敏度 0宽松~100严格，50=出厂均衡（farmMin2.5/信0.8/极端豁免3.5） */
+    fun sensitivity(ctx: Context) = sp(ctx).getInt("sensitivity", 50)
+    fun setSensitivity(ctx: Context, v: Int) = sp(ctx).edit().putInt("sensitivity", v.coerceIn(0, 100)).apply()
+
     fun statsSkipped(ctx: Context): Int = sp(ctx).getInt("stats_skipped", 0)
 
     /** 服务存活标志：onServiceConnected 写 true，onDestroy/onUnbind 写 false */

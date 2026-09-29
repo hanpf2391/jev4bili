@@ -152,6 +152,29 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "已清空", Toast.LENGTH_SHORT).show()
         }
 
+        // v0.11.0 判定灵敏度滑杆（设计稿 slider-row）：0宽松~100严格，50=出厂均衡
+        val senseRange = findViewById<android.widget.SeekBar>(R.id.senseRange)
+        val senseVal = findViewById<TextView>(R.id.senseVal)
+        val senseDesc = findViewById<TextView>(R.id.senseDesc)
+        fun senseBand(s: Int) = when {
+            s < 20 -> "宽松"; s < 40 -> "适中"; s <= 60 -> "均衡"; s <= 80 -> "敏感"; else -> "严格"
+        }
+        fun renderSense(p: Int) {
+            senseVal.text = "$p"
+            senseDesc.text = "当前：${senseBand(p)}，漏放与误拦的平衡点"
+        }
+        senseRange.progress = Prefs.sensitivity(this)
+        renderSense(senseRange.progress)
+        senseRange.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(sb: android.widget.SeekBar?, p: Int, fromUser: Boolean) = renderSense(p)
+            override fun onStartTrackingTouch(sb: android.widget.SeekBar?) {}
+            override fun onStopTrackingTouch(sb: android.widget.SeekBar?) {
+                val p = sb?.progress ?: 50
+                Prefs.setSensitivity(this@MainActivity, p)
+                Toast.makeText(this@MainActivity, "已保存：${senseBand(p)}（下一条视频起生效）", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         findViewById<MaterialSwitch>(R.id.swTipGenuine).apply {
             isChecked = Prefs.tipGenuine(this@MainActivity)
             setOnCheckedChangeListener { _, c -> Prefs.setTipGenuine(this@MainActivity, c) }

@@ -18,26 +18,31 @@ import java.util.concurrent.TimeUnit
 object JevClient {
 
     data class Judgment(
-        val contentType: String,   // v0.9.0宽口径: original_content/farm_repost/engagement_bait/sales_funnel/normal_news
-        val confidence: Double,    // content_type 的置信度
-        val mktgLevel: Double,     // v0.9.0起语义=农场度 0-4（0纯原创…4纯农场量产）
-        val clickbait: Double,     // 标题党 0-1
+        val contentType: String,
+        val confidence: Double,
+        val mktgLevel: Double,
+        val clickbait: Double = 0.0,
         val mktgConfidence: Double = 0.0,  // v0.9.1 农场度题自身置信度（无则回退分类置信度）
+        val sens: Int = 50,                // v0.11.0 判定灵敏度 0宽松~100严格（50=原固定阈值）
     ) {
         /** v0.9.1 保险丝修正（EdgeAITech案：中配搬运农场度3.6被分类置信0.37一票否决）：
          *  置信门槛改看农场度题自己的置信；农场度>=3.5极端高分时不再受置信约束——
          *  对"是哪类"犹豫≠对"农场味浓"犹豫。宁漏勿误底线：2.5~3.5之间仍需置信>=0.8。 */
+        /* v0.11.0 灵敏度平移：farmMin 3.5→2.0、confNeed 0.95→0.0、极端豁免=farmMin+1.0
+         *  s=50 与旧硬编码完全一致（2.5/0.8/3.5）——老判定与回归测试零漂移 */
+        private val farmMin: Double get() = (2.5 + (50 - sens) / 50.0).coerceIn(2.0, 3.5)
+        private val confNeed: Double get() = (0.8 + (50 - sens) / 50.0 * 0.8).coerceIn(0.0, 0.95)
         val isMarketing: Boolean
-            get() = (confidence >= 0.8 && contentType == "sales_funnel") ||
-                (mktgLevel >= 2.5 && (mktgConfidence >= 0.8 || mktgLevel >= 3.5))
+            get() = (confidence >= confNeed && contentType == "sales_funnel") ||
+                (mktgLevel >= farmMin && (mktgConfidence >= confNeed || mktgLevel >= farmMin + 1.0))
 
         /** 互动钓鱼/标题党（仅记录行提示，农场度不够不标营销号） */
         val isClickbait: Boolean
-            get() = confidence >= 0.8 && contentType == "engagement_bait" && mktgLevel < 2.5
+            get() = confidence >= confNeed && contentType == "engagement_bait" && mktgLevel < farmMin
 
         /** v0.9.1 边缘态：农场度超线但置信不足被放行——记录行标"存疑"供人工复核 */
         val isBorderline: Boolean
-            get() = !isMarketing && mktgLevel >= 2.5
+            get() = !isMarketing && mktgLevel >= farmMin
     }
 
     private const val API_URL = "https://api.typesafe.ai/v1/systemone"
@@ -143,6 +148,7 @@ object JevClient {
                             mktgConfidence = answers.getJSONObject("mktg_level").let { m ->
                                 if (m.has("confidence")) m.optDouble("confidence", 0.0) else ct.optDouble("confidence", 0.0)
                             },
+                            sens = Prefs.sensitivity(ctx),
                         ) to ""
                     }
                 } catch (e: Exception) {

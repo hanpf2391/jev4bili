@@ -298,6 +298,12 @@ class ExtractionTest {
 
     @Test fun `阈值_硬广或高味仍是营销号`() {
         assertTrue(JevClient.Judgment("sales_funnel", 0.9, 3.2, 0.2).isMarketing)
+
+        // v0.11.0 灵敏度：100严格=farmMin2.0无置信门槛（味2.1低置信也拦）；0宽松=farmMin3.5（味3.4不拦）
+        assertTrue(JevClient.Judgment("farm_repost", 0.3, 2.1, 0.0, 0.2, sens = 100).isMarketing)
+        assertFalse(JevClient.Judgment("farm_repost", 0.6, 3.4, 0.0, 0.9, sens = 0).isMarketing)
+        // s=50 与旧硬编码等价（回归锚）
+        assertTrue(JevClient.Judgment("farm_repost", 0.6, 3.6, 0.0, 0.5, sens = 50).isMarketing)
         assertTrue(JevClient.Judgment("original_content", 0.9, 2.6, 0.0, 0.9).isMarketing)   // 农场度≥2.5+农场置信够
         assertFalse(JevClient.Judgment("sales_funnel", 0.5, 3.0, 0.3).isMarketing)  // 分类置信不足且非极端农场
     }

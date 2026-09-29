@@ -5,6 +5,11 @@
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorSecondary">@color/primary</item>
         <item name="colorPrimaryContainer">@color/blue_container</item>
+        <item name="colorOnPrimaryContainer">@color/primary</item>
+        <item name="colorSecondaryContainer">@color/blue_container</item>
+        <item name="colorOnSecondaryContainer">@color/primary</item>
+        <item name="colorSurfaceVariant">@color/pill_bg_off</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
         <item name="android:statusBarColor">#FFFFFF</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/bg_page</item>
