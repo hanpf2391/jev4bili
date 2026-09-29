@@ -15,6 +15,8 @@
 
 **纯无障碍方案：不 root、不破解、不调用B站任何接口、永不自动操作你的手机。**
 
+🌐 **官网**：<https://hanpf2391.github.io/jev4bili/> —— 安装包、功能介绍、常见问题。
+
 > 灵感来自 [jev-chat/jev-chat-jarvis](https://github.com/jev-chat/jev-chat-jarvis)（BYOK 哲学）与 GKD（纯无障碍先例）。
 
 ## 界面
