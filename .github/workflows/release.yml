@@ -75,11 +75,16 @@ jobs:
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           ls -la "$NAME"
 
-      # 签名不对的包装不上，必须在发布前拦下
+      # 签名不对的包装不上，必须在发布前拦下；顺带把指纹带进 Release 说明
       - name: 校验签名
+        id: sign
         run: |
           APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | tail -1)
-          "$APKSIGNER" verify --print-certs "${{ steps.artifact.outputs.name }}"
+          OUT=$("$APKSIGNER" verify --print-certs "${{ steps.artifact.outputs.name }}")
+          echo "$OUT"
+          FP=$(printf '%s' "$OUT" | grep -i 'certificate SHA-256 digest' | head -1 | awk '{print $NF}')
+          if [ -z "$FP" ]; then echo "::error::未能取到签名指纹"; exit 1; fi
+          echo "fingerprint=$FP" >> "$GITHUB_OUTPUT"
 
       # 只在 tag 上发 Release；手动 dispatch 只跑构建，用来验证配置而不误发版
       - name: 创建 Release
@@ -87,4 +92,33 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.artifact.outputs.name }}
+          body: |
+            ## JEV4Bili ${{ github.ref_name }}
+
+            ### 安装
+
+            1. 下载下面的 `${{ steps.artifact.outputs.name }}`
+            2. 系统提示时允许「安装未知来源应用」
+            3. 开启无障碍：设置 → 无障碍 → 已下载应用 → JEV4Bili
+            4. 在 App 设置页填入你自己的 Jev API Key（不填则只做本地记录，不做 AI 判定）
+
+            ### ⚠️ 装过 debug 版的人必读
+
+            早期分发的包是 debug 签名（`CN=Android Debug`），正式版用的是独立发布密钥
+            （`CN=JEV4Bili`）。**签名不同，Android 不允许覆盖安装**——装过旧版的话，
+            请先卸载再装本版（本地判定记录会被清除）。
+
+            ### 校验签名
+
+            本产物的签名证书 SHA-256 指纹：
+
+            ```
+            ${{ steps.sign.outputs.fingerprint }}
+            ```
+
+            可用 `apksigner verify --print-certs ${{ steps.artifact.outputs.name }}` 自行核对。
+
+            ---
+
+            📖 官网 <https://hanpf2391.github.io/jev4bili/> · 源码 <https://github.com/hanpf2391/jev4bili>
           generate_release_notes: true
