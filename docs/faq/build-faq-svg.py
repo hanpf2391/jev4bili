@@ -45,7 +45,8 @@ RULE = "#dbe5f1"
 # ── 六条 FAQ：题干、正文、配色、图标 ──────────────────────────────────────
 # 文案与 README「文字版（点开）」逐字一致，改 README 时必须同步改这里。
 CARDS = [
-    dict(q="会被 B 站封号吗？", accent="#2563eb", tint="#eff6ff", edge="#bfdbfe",
+    # accent 用 App 品牌蓝 colors.xml/primary=#1B61C9，与 how-it-works 和落地页统一
+    dict(q="会被 B 站封号吗？", accent="#1B61C9", tint="#eff6ff", edge="#bfdbfe",
          # 手工断行：自动折行会把「屏幕」拆成两行，读起来糙。
          a=["不会。不调用 B 站任何接口、不修改客户端，也不注入进程，",
             "只是读屏幕上你本来就看得见的那几个字——和你看屏幕没什么区别。"],

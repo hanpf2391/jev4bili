@@ -44,7 +44,7 @@ FLOW_TRAVEL = 444.0      # 稳定运行期 dash offset 总位移（≈120 单位
 
 # 每条边的「流光」配色：底色取原色，流光取同色系浅调 + 更浅的脉冲头
 TINTS = {
-    "#2563eb": ("#93c5fd", "#dbeafe"),   # 蓝 · ingress
+    "#1b61c9": ("#93c5fd", "#dbeafe"),   # 品牌蓝 · ingress（校正后的值）
     "#f97316": ("#fdba74", "#ffedd5"),   # 橙 · extract
     "#7c3aed": ("#c4b5fd", "#ede9fe"),   # 紫 · resolve
     "#10b981": ("#6ee7b7", "#d1fae5"),   # 绿 · memory-write
@@ -60,6 +60,14 @@ DEFAULT_TINT = ("#cbd5e1", "#f1f5f9")
 CONTRAST_FIX = {
     "#6b7280": "#5f6875",   # node-sub / arrow-label / legend
     "#64748b": "#58636f",   # node-type / section-sub / metric-label / footnote
+}
+
+# ── 品牌蓝校正 ────────────────────────────────────────────────────────────
+# fireworks 的 Style 1 默认蓝是 #2563eb，而 App 的品牌蓝是 colors.xml 里的
+# #1B61C9。落地页上两张图与页面会同屏出现，色差看得出来，所以统一到品牌色。
+# 只作用于渲染内容，不改 edges 解析——流光的浅蓝底纹是按原色查表的。
+BRAND_FIX = {
+    "#2563eb": "#1b61c9",
 }
 
 # SVG 里用到的字体族——HyperFrames 要求命名字体必须有 @font-face。
@@ -212,12 +220,20 @@ def main() -> int:
     if not SVG_PATH.exists():
         sys.exit(f"找不到 {SVG_PATH}，请先用 fireworks 渲染出 SVG")
 
-    src = SVG_PATH.read_text(encoding="utf-8")
-    inner, edges, labels = parse_svg(src)
+    raw = SVG_PATH.read_text(encoding="utf-8")
 
-    # 对比度修正（来由见 CONTRAST_FIX 注释）
-    for old, new in CONTRAST_FIX.items():
-        inner = inner.replace(old, new).replace(old.upper(), new)
+    # 先做对比度修正 + 品牌蓝校正，再解析——这样 edges 拿到的就是最终色，
+    # 且重跑幂等（第二次已无旧色可替换）。校正后的 SVG 写回原路径，
+    # 让 PNG / 交互 HTML 的导出也走同一套颜色，避免动图与静态图蓝不一致。
+    src = raw
+    for fix in (CONTRAST_FIX, BRAND_FIX):
+        for old, new in fix.items():
+            src = src.replace(old, new).replace(old.upper(), new)
+    if src != raw:
+        SVG_PATH.write_text(src, encoding="utf-8")
+        print("  · SVG 已按品牌色/对比度校正并写回")
+
+    inner, edges, labels = parse_svg(src)
 
     vm = re.search(r'viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"', src)
     if not vm:

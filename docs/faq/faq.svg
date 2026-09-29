@@ -14,7 +14,7 @@
 <g>
   <rect x="40" y="134" width="560" height="156" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.4"/>
   <rect x="66" y="160" width="44" height="44" rx="11" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.4"/>
-  <g transform="translate(76,170)" fill="none" stroke="#2563eb" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 19.8 12 21 C7.5 19.8 4 16.5 4 12 V6 Z"/><path d="M8.5 12 L11 14.5 L15.5 10"/></g>
+  <g transform="translate(76,170)" fill="none" stroke="#1B61C9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 19.8 12 21 C7.5 19.8 4 16.5 4 12 V6 Z"/><path d="M8.5 12 L11 14.5 L15.5 10"/></g>
   <text class="num" x="574" y="168" text-anchor="end">01</text>
   <text class="q" x="126" y="182">会被 B 站封号吗？</text>
   <text class="a" x="126" y="220">不会。不调用 B 站任何接口、不修改客户端，也不注入进程，</text>
