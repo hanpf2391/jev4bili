@@ -6,6 +6,12 @@
 
 > 灵感来自 [jev-chat/jev-chat-jarvis](https://github.com/jev-chat/jev-chat-jarvis)（BYOK 哲学）与 GKD（纯无障碍先例）。
 
+## 界面
+
+| 守门 | 记录 | 设置 |
+|---|---|---|
+| ![守门](docs/screenshots/home.png) | ![记录](docs/screenshots/records.png) | ![设置](docs/screenshots/settings.png) |
+
 ## 它解决什么问题
 
 B站竖屏流里混着大量以流量变现为目的的批量内容，本项目采用**宽口径**定义，以下四类全部算「营销号」：
