@@ -341,6 +341,7 @@ class MainActivity : AppCompatActivity() {
             if (d.matches(Regex("\\d{2}-\\d{2}"))) buckets[d] = (buckets[d] ?: 0) + 1
         }
         val barIds = listOf(R.id.bar1, R.id.bar2, R.id.bar3, R.id.bar4, R.id.bar5, R.id.bar6, R.id.bar7)
+        val labelIds = listOf(R.id.barN1, R.id.barN2, R.id.barN3, R.id.barN4, R.id.barN5, R.id.barN6, R.id.barN7)
         val dp = { v: Int -> (v * resources.displayMetrics.density).toInt() }
         val cal = java.util.Calendar.getInstance()
         cal.add(java.util.Calendar.DAY_OF_YEAR, -6)
@@ -350,8 +351,12 @@ class MainActivity : AppCompatActivity() {
             val n = buckets[key] ?: 0
             total += n
             val v = findViewById<View>(id)
-            v.layoutParams.height = if (n == 0) dp(4) else (dp(4) + (dp(58) * n.toFloat() / (buckets.values.maxOrNull() ?: 1))).toInt()
+            // v0.10.1 柱高：非零才起柱；分母兜底max(周max,3)防"单条顶格"误读（柱顶另有数字标签）
+            v.layoutParams.height = if (n == 0) dp(4)
+                else (dp(4) + (dp(52) * n.toFloat() / maxOf(buckets.values.maxOrNull() ?: 1, 3))).toInt()
             v.requestLayout()
+            val lb = findViewById<TextView>(labelIds[i])
+            if (n > 0) { lb.text = n.toString(); lb.visibility = View.VISIBLE } else lb.visibility = View.GONE
             if (i < 6) cal.add(java.util.Calendar.DAY_OF_YEAR, 1)
         }
         findViewById<TextView>(R.id.barsTotal).text = "合计 $total"
