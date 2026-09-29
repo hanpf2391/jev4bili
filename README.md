@@ -1,5 +1,16 @@
 # JEV4Bili — Jev 驱动的B站刷流守门员
 
+<p align="center">
+  <img src="docs/banner.png" alt="JEV4Bili — B站刷流守门员" width="90%" />
+</p>
+
+<p align="center">
+  <img alt="版本" src="https://img.shields.io/badge/version-v0.11.1-1b61c9" />
+  <img alt="许可" src="https://img.shields.io/badge/license-GPL--3.0-006400" />
+  <img alt="平台" src="https://img.shields.io/badge/Android-8.0%2B-3DDC84" />
+  <img alt="模式" src="https://img.shields.io/badge/BYOK-你的密钥你的额度-181d26" />
+</p>
+
 刷B站「看看」竖屏流时，用 [Jev](https://github.com/jev-chat/jev-chat-jarvis) 模型实时判断农场内容（营销号），弹横幅提醒你划走。
 
 **纯无障碍方案：不 root、不破解、不调用B站任何接口、永不自动操作你的手机。**
@@ -68,7 +79,7 @@ B站竖屏流卡片（标题/UP主/互动数字，屏幕上公开可见的文本
 
 ## 反馈
 
-[GitHub Issues](../../issues) —— 误判/漏判直接贴 App「运行自检 → 复制诊断信息」的输出，附上你觉得该判成什么。
+[GitHub Issues](../../issues) —— 误判/漏判直接贴 App 设置页「复制诊断信息」的输出，附上你觉得该判成什么。
 
 ## License
 
