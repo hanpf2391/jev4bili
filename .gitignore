@@ -1,5 +1,13 @@
 *.apk
 *.aab
+
+# ── 发布签名：绝不进版本库 ──────────────────────────────────────────────
+# keystore 就是项目的身份；连同密码泄露 = 任何人都能冒充你发版。
+# 丢了 = 永远无法给老用户推送更新。请离线备份（密码管理器 + 至少一处异地）。
+keystore.properties
+*.jks
+*.keystore
+
 .gradle/
 build/
 local.properties
