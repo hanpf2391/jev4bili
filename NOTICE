@@ -1,0 +1,43 @@
+JEV4Bili
+Copyright © 2026 hanpf2391 与 JEV4Bili 贡献者
+
+本产品以 GNU General Public License v3.0 授权，全文见 LICENSE。
+分发或修改本产品时，请保留本 NOTICE 与 LICENSE。
+
+────────────────────────────────────────────────────────────────────────
+第三方组件
+────────────────────────────────────────────────────────────────────────
+
+本应用包含以下第三方开源组件，均为 Apache License 2.0 授权：
+
+    AndroidX Core KTX             androidx.core:core-ktx
+    AndroidX AppCompat            androidx.appcompat:appcompat
+    AndroidX Lifecycle Service    androidx.lifecycle:lifecycle-service
+    Material Components           com.google.android.material:material
+    OkHttp                        com.squareup.okhttp3:okhttp
+    Kotlin Coroutines             org.jetbrains.kotlinx:kotlinx-coroutines-android
+
+各组件版权归其各自所有者。Apache License 2.0 全文：
+https://www.apache.org/licenses/LICENSE-2.0
+
+────────────────────────────────────────────────────────────────────────
+致意
+────────────────────────────────────────────────────────────────────────
+
+本项目的 BYOK（自带密钥）设计哲学，与纯无障碍（免 root）技术路线，
+分别受以下项目启发：
+
+    jev-chat/jev-chat-jarvis      https://github.com/jev-chat/jev-chat-jarvis
+    GKD                           https://github.com/gkd-kit/gkd
+
+二者均为独立项目，与本项目无从属关系。
+
+────────────────────────────────────────────────────────────────────────
+商标
+────────────────────────────────────────────────────────────────────────
+
+「JEV4Bili」名称与标识不随代码授权。分发时不得使用该名称或标识，
+暗示由原作者出品、赞助或背书。
+
+本项目与哔哩哔哩（bilibili.com）、Jev / typesafe.ai 及相关公司均无任何
+关联、合作或授权。"Bilibili" 相关字样仅用于描述兼容对象。
