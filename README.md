@@ -95,7 +95,9 @@ B站竖屏流里混着大量以流量变现为目的的批量内容，本项目�
 
 ## 反馈
 
-[GitHub Issues](../../issues) —— 误判/漏判直接贴 App 设置页「复制诊断信息」的输出，附上你觉得该判成什么。
+优先走 [GitHub Issues](../../issues) —— 误判/漏判直接贴 App 设置页「复制诊断信息」的输出，附上你觉得该判成什么。你的反馈也会帮到遇到同样问题的人。
+
+不习惯公开讨论的，可以走微信 `pengfei6017` 或邮箱 [hpengfei0@gmail.com](mailto:hpengfei0@gmail.com)。
 
 ## 版权与许可
 
