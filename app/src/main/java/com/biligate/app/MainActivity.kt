@@ -216,8 +216,8 @@ class MainActivity : AppCompatActivity() {
 
         // v0.10.0 关于卡：版本 / 开源仓库 / 反馈 / 隐私策略
         findViewById<TextView>(R.id.aboutVersion).text = runCatching {
-            "JEV4Bili ${packageManager.getPackageInfo(packageName, 0).versionName} · Jev 驱动的B站刷流守门员 · 纯无障碍方案"
-        }.getOrDefault("JEV4Bili · Jev 驱动的B站刷流守门员")
+            "JEV4Bili v${packageManager.getPackageInfo(packageName, 0).versionName}"
+        }.getOrDefault("JEV4Bili")
         fun copyLink(url: String, label: String) {
             val cm = getSystemService(android.content.ClipboardManager::class.java)
             cm.setPrimaryClip(android.content.ClipData.newPlainText(label, url))

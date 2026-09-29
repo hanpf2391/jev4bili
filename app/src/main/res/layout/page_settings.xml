@@ -327,9 +327,19 @@
                     android:id="@+id/aboutVersion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
                     android:text="JEV4Bili v?" />
+
+                <TextView
+                    android:id="@+id/aboutSub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:text="Jev 驱动 · B站刷流内容守门员 · 开源（GPL-3.0）" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRepo"
