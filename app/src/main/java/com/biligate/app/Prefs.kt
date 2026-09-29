@@ -38,6 +38,12 @@ object Prefs {
     /** v0.7.0：BYOK——用户自填密钥（留空=回退内置调试密钥） */
     fun setJevKey(ctx: Context, v: String) = sp(ctx).edit().putString("jev_key", v).apply()
 
+    /** v0.10.2 BYOK双通道：typesafe直连 / 自定义端点 */
+    fun apiProvider(ctx: Context) = sp(ctx).getString("api_provider", "typesafe") ?: "typesafe"
+    fun setApiProvider(ctx: Context, v: String) = sp(ctx).edit().putString("api_provider", v).apply()
+    fun customApiBase(ctx: Context): String = sp(ctx).getString("api_base", "") ?: ""
+    fun setCustomApiBase(ctx: Context, v: String) = sp(ctx).edit().putString("api_base", v).apply()
+
     fun statsSkipped(ctx: Context): Int = sp(ctx).getInt("stats_skipped", 0)
 
     /** 服务存活标志：onServiceConnected 写 true，onDestroy/onUnbind 写 false */
@@ -56,7 +62,7 @@ object Prefs {
     fun incBlocked(ctx: Context) = sp(ctx).edit().putInt("stats_blocked", statsBlocked(ctx) + 1).apply()
 
     /** 干货视频是否也弹提示（默认关——每条都弹太吵） */
-    fun tipGenuine(ctx: Context) = sp(ctx).getBoolean("tip_genuine", false)
+    fun tipGenuine(ctx: Context) = sp(ctx).getBoolean("tip_genuine", true)
     fun setTipGenuine(ctx: Context, v: Boolean) = sp(ctx).edit().putBoolean("tip_genuine", v).apply()
 
     fun resetStatsIfNewDay(ctx: Context) {

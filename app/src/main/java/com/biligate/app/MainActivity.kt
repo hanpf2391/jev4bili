@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var stats: TextView
     private lateinit var whiteList: TextView
     private lateinit var blackList: TextView
-    private lateinit var diag: TextView
     private lateinit var etJevKey: TextInputEditText
     private lateinit var rowA11y: TextView
     private lateinit var rowConn: TextView
@@ -39,9 +38,8 @@ class MainActivity : AppCompatActivity() {
     private val diagRefresher = object : Runnable {
         override fun run() {
             refresh()   // v0.8.8 就绪清单每秒活刷——旧逻辑只在onResume刷一次，开着App等状态变化时清单是死的
-            refreshDiag()
             refreshHomeStats()
-            // v0.9.7 记录页=设计稿单条卡（v0.9.4文本流水退役）
+            // v0.9.7 记录页=设计稿单条卡（v0.9.4文本流水退役）；v0.10.2 运行自检卡已删（诊断只留"复制"）
             renderRecordsUI(DiagStore.load(this@MainActivity))
             diagHandler.postDelayed(this, 1000)
         }
@@ -84,7 +82,6 @@ class MainActivity : AppCompatActivity() {
         stats = findViewById(R.id.stats)
         whiteList = findViewById(R.id.whiteList)
         blackList = findViewById(R.id.blackList)
-        diag = findViewById(R.id.diag)
         etJevKey = findViewById(R.id.etJevKey)
         rowA11y = findViewById(R.id.rowA11y)
         rowConn = findViewById(R.id.rowConn)
@@ -159,14 +156,25 @@ class MainActivity : AppCompatActivity() {
             isChecked = Prefs.tipGenuine(this@MainActivity)
             setOnCheckedChangeListener { _, c -> Prefs.setTipGenuine(this@MainActivity, c) }
         }
-        findViewById<MaterialSwitch>(R.id.swDns).apply {
-            isChecked = Prefs.dnsDirect(this@MainActivity)
-            setOnCheckedChangeListener { _, c -> Prefs.setDnsDirect(this@MainActivity, c) }
+
+        // v0.10.2 BYOK双通道：TypeSafe直连 / 自定义端点（选择即时保存，Base URL随密钥一起保存）
+        val providerGroup = findViewById<com.google.android.material.button.MaterialButtonToggleGroup>(R.id.providerGroup)
+        val etApiBase = findViewById<TextInputEditText>(R.id.etApiBase)
+        val baseInput = findViewById<View>(R.id.baseInput)
+        fun renderProvider() {
+            val custom = Prefs.apiProvider(this) == "custom"
+            findViewById<MaterialButton>(R.id.btnProviderTypesafe).isChecked = !custom
+            findViewById<MaterialButton>(R.id.btnProviderCustom).isChecked = custom
+            baseInput.visibility = if (custom) View.VISIBLE else View.GONE
         }
-        findViewById<MaterialSwitch>(R.id.swDump).apply {
-            isChecked = Prefs.dumpDebug(this@MainActivity)
-            setOnCheckedChangeListener { _, c -> Prefs.setDumpDebug(this@MainActivity, c) }
+        providerGroup.addOnButtonCheckedListener { _, id, checked ->
+            if (checked) {
+                Prefs.setApiProvider(this, if (id == R.id.btnProviderCustom) "custom" else "typesafe")
+                renderProvider()
+            }
         }
+        etApiBase.setText(Prefs.customApiBase(this))
+        renderProvider()
 
         findViewById<MaterialButton>(R.id.btnAddWhite).setOnClickListener {
             val et = findViewById<TextInputEditText>(R.id.etUploader)
@@ -245,6 +253,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "已自动去除密钥里的异常字符", Toast.LENGTH_SHORT).show()
             }
             Prefs.setJevKey(this, k)
+            // v0.10.2 自定义端点随密钥一起保存
+            Prefs.setCustomApiBase(this, etApiBase.text?.toString()?.trim().orEmpty())
             sendBroadcast(android.content.Intent(GateKeeperService.KEY_ACTION)
                 .setPackage(packageName).putExtra("key", k))
             Toast.makeText(this, "密钥已保存", Toast.LENGTH_SHORT).show()
@@ -495,25 +505,6 @@ class MainActivity : AppCompatActivity() {
                 fill.layoutParams.width = (card.width * pct / 100).coerceAtLeast(20)
                 fill.requestLayout()
             }
-        }
-    }
-
-    private fun refreshDiag() {
-        val s = DiagStore.load(this)
-        val ago = { t: Long -> if (t == 0L) "从未" else "${(System.currentTimeMillis() - t) / 1000}秒前" }
-        val d = { k: String -> s.diag[k].orEmpty().ifBlank { "-" } }
-        val connected = s.connectedAt.ifBlank { "未连接过" }
-        diag.text = buildString {
-            append("⓪ 服务上线：$connected\n")
-            append("① 总事件：${s.totalEvents}（${ago(s.totalLastAt)}）")
-            append("｜B站：${s.eventCount}（${ago(s.lastEventAt)}）\n")
-            append("② 窗口节点：${d("root_info")}\n")
-            append("③ 文本：${d("texts_count")} 条\n")
-            append("④ 标题：${d("last_title")}\n")
-            append("ⓐ 快照脚印：${d("step_hist")}\n")
-            append("⑤ 判定：${d("last_judge")}\n")
-            s.diag["last_jev_err"].orEmpty().let { if (it.isNotEmpty()) append("⚠ Jev错误：$it\n") }
-            append("—— 文本样本 ——\n${d("texts_sample")}")
         }
     }
 

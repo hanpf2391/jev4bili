@@ -464,8 +464,9 @@ class GateKeeperService : AccessibilityService() {
             j.isBorderline -> OverlayBanner.showSuspect(this,
                 "存疑 · $zh · 味${"%.1f".format(j.mktgLevel)} · 信${"%.2f".format(j.confidence)} · 证据不足仅提示", 2400)
             else -> {
-                // v0.7.2 横幅只回答一个问题"是不是营销号"：正常统一绿"正常"，干货/标题党等分类留在记录行
-                OverlayBanner.showGenuine(this, "正常 营销味${"%.1f".format(j.mktgLevel)} 信${"%.2f".format(j.confidence)}", 1800)
+                // v0.10.2 正常视频横幅受"每条都弹"门槛（测试期默认开；关闭后正常视频不打扰，判定仍进记录）
+                if (Prefs.tipGenuine(this))
+                    OverlayBanner.showGenuine(this, "正常 营销味${"%.1f".format(j.mktgLevel)} 信${"%.2f".format(j.confidence)}", 1800)
             }
         }
     }

@@ -38,21 +38,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
-                    android:text="干货视频也弹提示" />
+                    android:text="每条视频都弹横幅" />
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/swDns"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:text="Jev API IP直连（公司WiFi用）" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/swDump"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:text="Dump模式（文本进logcat）" />
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:text="关闭后只提醒营销号与存疑，正常视频不打扰（测试期建议开）" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -79,7 +72,48 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary"
-                    android:text="填你自己的 Jev API Key，调用费用在你的账户结算（留空=不启用判断）。" />
+                    android:text="接口自己配（BYOK）：默认 TypeSafe 直连，也可换自定义端点。密钥与费用都是你自己的，留空=不启用判断。" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/providerGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnProviderTypesafe"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TypeSafe 直连" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnProviderCustom"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="自定义" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/baseInput"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:hint="API Base URL（https://host/v1/systemone）">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etApiBase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textUri"
+                        android:importantForAutofill="no" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
@@ -206,44 +240,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===== 运行自检 ===== -->
-        <TextView
-            style="@style/SectionTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="运行自检" />
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/BiliGateCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/diag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:fontFamily="monospace"
-                    android:textColor="@color/text_secondary"
-                    android:textIsSelectable="true"
-                    android:text="等待数据…" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCopyDiag"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="复制诊断信息" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
         <!-- ===== 关于（v0.10.0：仓库/反馈/隐私策略） ===== -->
         <TextView
             style="@style/SectionTitle"
@@ -284,6 +280,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:text="反馈问题（GitHub Issues）" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCopyDiag"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="复制诊断信息（反馈问题时附上）" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPrivacy"

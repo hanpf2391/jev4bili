@@ -42,6 +42,11 @@ object JevClient {
 
     private const val API_URL = "https://api.typesafe.ai/v1/systemone"
 
+    /** v0.10.2 BYOK：自定义端点优先（用户自填），否则TypeSafe直连 */
+    private fun apiUrl(ctx: android.content.Context): String =
+        Prefs.customApiBase(ctx).takeIf { Prefs.apiProvider(ctx) == "custom" && it.isNotBlank() }
+            ?.trimEnd('/') ?: API_URL
+
     private fun client(dnsDirect: Boolean): OkHttpClient {
         val b = OkHttpClient.Builder()
             .connectTimeout(4, TimeUnit.SECONDS)
@@ -115,11 +120,12 @@ object JevClient {
             // "Unexpected char in Authorization value"闪退——只留ASCII，双进程全覆盖
             val key = (keyOverride ?: Prefs.jevKey(ctx)).filter { it.code < 128 }.trim()
             val req = Request.Builder()
-                .url(API_URL)
+                .url(apiUrl(ctx))
                 .header("Authorization", "Bearer $key")
                 .post(body.toString().toRequestBody("application/json; charset=utf-8".toMediaType()))
                 .build()
-            val attempts = if (Prefs.dnsDirect(ctx)) listOf(true, false) else listOf(false)
+            // v0.10.2 DNS自动回退：先系统解析，失败走IP直连（原"IP直连开关"并入自动）
+            val attempts = listOf(false, true)
             var lastErr = "无尝试"
             for (direct in attempts) {
                 try {
