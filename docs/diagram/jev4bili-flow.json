@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "mode": "flow",
+  "template_type": "flow",
+  "style": 1,
+  "motion_scene": "service-blueprint",
+  "quality_profile": "showcase",
+  "width": 1240,
+  "height": 700,
+  "title": "它怎么工作",
+  "subtitle": "只读屏上公开的文字 → 你自己的密钥判定 → 只提醒，绝不替你操作",
+  "text_policy": "strict",
+  "meta_left": "JEV4BILI / ACCESSIBILITY-GATED FEED",
+  "meta_right": "STYLE-1 · FLAT ICON",
+  "containers": [
+    {
+      "id": "cloud-src",
+      "x": 610,
+      "y": 100,
+      "width": 260,
+      "height": 140,
+      "label": "你自配的端点 · BYOK"
+    },
+    {
+      "id": "device",
+      "x": 30,
+      "y": 295,
+      "width": 1180,
+      "height": 295,
+      "label": "你的手机 · 本机（不截图 · 不上传图片 · 记录不外发）"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "judge",
+      "kind": "cloud_service",
+      "x": 640,
+      "y": 140,
+      "width": 200,
+      "height": 68,
+      "label": "Jev 模型",
+      "sublabel": "农场度 0~4 · 置信度 0~1",
+      "fill": "#faf5ff",
+      "stroke": "#ede9fe"
+    },
+    {
+      "id": "feed",
+      "kind": "rect",
+      "x": 60,
+      "y": 340,
+      "width": 200,
+      "height": 68,
+      "label": "B站「看看」竖屏流",
+      "sublabel": "你屏幕上本来就看得见的字",
+      "fill": "#ffffff",
+      "stroke": "#d1d5db"
+    },
+    {
+      "id": "a11y",
+      "kind": "double_rect",
+      "x": 350,
+      "y": 340,
+      "width": 200,
+      "height": 68,
+      "label": "安卓无障碍服务",
+      "sublabel": "只读卡片表皮 · 不截图",
+      "fill": "#eff6ff",
+      "stroke": "#bfdbfe"
+    },
+    {
+      "id": "banner",
+      "kind": "rect",
+      "x": 930,
+      "y": 340,
+      "width": 200,
+      "height": 68,
+      "label": "悬浮横幅提醒",
+      "sublabel": "营销号 / 存疑 / 正常",
+      "fill": "#fef2f2",
+      "stroke": "#fee2e2"
+    },
+    {
+      "id": "profile",
+      "kind": "cylinder",
+      "x": 640,
+      "y": 480,
+      "width": 200,
+      "height": 68,
+      "label": "UP主画像",
+      "sublabel": "累积历史判定 · 越用越准",
+      "fill": "#f0fdf4",
+      "stroke": "#dcfce7"
+    },
+    {
+      "id": "records",
+      "kind": "cylinder",
+      "x": 930,
+      "y": 480,
+      "width": 200,
+      "height": 68,
+      "label": "本地记录页",
+      "sublabel": "只存本机 · 最多 300 条",
+      "fill": "#f0fdf4",
+      "stroke": "#dcfce7"
+    }
+  ],
+  "arrows": [
+    {
+      "id": "read-screen",
+      "source": "feed",
+      "target": "a11y",
+      "source_port": "right",
+      "target_port": "left",
+      "flow": "read",
+      "motion_role": "ingress",
+      "motion_stage": 1,
+      "motion_order": 0,
+      "label": "读屏"
+    },
+    {
+      "id": "send-text",
+      "source": "a11y",
+      "target": "judge",
+      "source_port": "top",
+      "target_port": "left",
+      "flow": "data",
+      "motion_role": "extract",
+      "motion_stage": 2,
+      "motion_order": 0,
+      "label": "文字出网"
+    },
+    {
+      "id": "verdict",
+      "source": "judge",
+      "target": "banner",
+      "source_port": "right",
+      "target_port": "top",
+      "flow": "control",
+      "motion_role": "resolve",
+      "motion_stage": 3,
+      "motion_order": 0,
+      "label": "判定结果"
+    },
+    {
+      "id": "build-profile",
+      "source": "judge",
+      "target": "profile",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "write",
+      "motion_role": "memory-write",
+      "motion_stage": 4,
+      "motion_order": 0,
+      "label": "累积画像"
+    },
+    {
+      "id": "log-local",
+      "source": "banner",
+      "target": "records",
+      "source_port": "bottom",
+      "target_port": "top",
+      "flow": "write",
+      "motion_role": "memory-write",
+      "motion_stage": 5,
+      "motion_order": 0,
+      "label": "只存本机"
+    }
+  ],
+  "legend_orientation": "horizontal",
+  "legend_x": 40,
+  "legend_y": 630,
+  "legend_locked": false,
+  "legend": [
+    { "flow": "read", "label": "读屏" },
+    { "flow": "data", "label": "文字出网" },
+    { "flow": "control", "label": "判定" },
+    { "flow": "write", "label": "本机落盘" }
+  ],
+  "footer": "纯无障碍方案 · 不 root · 不调 B 站任何接口 · 零遥测",
+  "footer_x": 40,
+  "footer_y": 672
+}

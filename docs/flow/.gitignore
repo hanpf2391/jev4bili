@@ -1,0 +1,21 @@
+# HyperFrames 构建产物 —— 只提交合成源码与子集字体，不提交中间物
+node_modules/
+renders/
+snapshots/
+.hyperframes/
+assets/media/
+
+# 字体源文件：各 4~8MB，仅用于跑 tools/subset-fonts.py 重新生成子集
+assets/fonts/*-Regular.ttf
+assets/fonts/*-subset.ttf
+
+# hyperframes 生成的智能体说明与本地元数据——只对本机 agent 有意义，
+# 放进一个讲 B 站安卓应用的公开仓库纯属噪音
+AGENTS.md
+CLAUDE.md
+meta.json
+
+# 编辑器 / 系统
+.DS_Store
+.idea/
+*.iml

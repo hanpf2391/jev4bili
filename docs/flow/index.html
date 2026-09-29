@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1240, height=700" />
+    <title>JEV4Bili · 它怎么工作</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* 图上用的是系统字体栈；HyperFrames 要求命名字体必须有 @font-face，
+         系统自带字体用 src: local(...) 声明即可，不需要字体文件。 */
+      @font-face { font-family: "Helvetica Neue"; src: local("Helvetica Neue"); }
+      @font-face { font-family: "Helvetica"; src: local("Helvetica"); }
+      @font-face { font-family: "Arial"; src: local("Arial"); }
+      @font-face { font-family: "PingFang SC"; src: local("PingFang SC"); }
+      @font-face { font-family: "Noto Sans CJK SC"; src: local("Noto Sans CJK SC"); }
+      @font-face { font-family: "Microsoft YaHei"; src: local("Microsoft YaHei"); }
+      @font-face { font-family: "Microsoft JhengHei"; src: local("Microsoft JhengHei"); }
+      @font-face { font-family: "SimHei"; src: local("SimHei"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1240px; height: 700px; overflow: hidden; background: #ffffff; }
+      #root { width: 100%; height: 100%; }
+      #root > svg { display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="flow" data-start="0" data-duration="5.75"
+         data-width="1240" data-height="700">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 700" width="1240" height="700" data-generator="fireworks-tech-graph" data-schema-version="1" data-text-metrics="heuristic-v1" data-style-id="1" data-visual-theme="Flat Icon" data-diagram-type="flow" data-motion-scene="service-blueprint" data-semantic-profile="generic" data-semantic-valid="true" data-quality-profile="showcase" data-max-bends-per-edge="2" data-max-total-bends="8" data-max-route-stretch="1.35" data-max-bridged-crossings="0" data-min-node-gap="40.0" data-min-container-gutter="20.0" data-min-label-clearance="4.0" data-min-segment-length="16.0">
+  <defs>
+    <marker id="arrowA" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrowB" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+    <marker id="arrowC" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowE" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f97316"/>
+    </marker>
+    <marker id="arrowF" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowH" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5f6875"/>
+    </marker>
+    <filter id="shadowSoft" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+    <filter id="shadowGlass" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#020617" flood-opacity="0.28"/>
+    </filter>
+    <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Microsoft JhengHei', 'SimHei', sans-serif; }
+    .title { font-size: 30px; font-weight: 700; fill: #111827; }
+    .subtitle { font-size: 14px; font-weight: 500; fill: #5f6875; }
+    .section { font-size: 13px; font-weight: 700; fill: #2563eb; letter-spacing: 1.4px; }
+    .section-sub { font-size: 12px; font-weight: 500; fill: #58636f; }
+    .node-title { font-weight: 700; fill: #111827; }
+    .node-sub { font-weight: 500; fill: #5f6875; }
+    .node-type { font-size: 12px; font-weight: 700; fill: #58636f; letter-spacing: 0.08em; }
+    .arrow-label { font-size: 12px; font-weight: 600; fill: #5f6875; }
+    .legend { font-size: 12px; font-weight: 500; fill: #5f6875; }
+    .footnote { font-size: 12px; font-weight: 500; fill: #58636f; }
+    .metric-label { font-size: 8.5px; font-weight: 700; fill: #58636f; text-transform: uppercase; }
+    .metric-value { font-size: 9.5px; font-weight: 700; fill: #111827; }
+    </style>
+  </defs>
+  <rect data-graph-role="background" width="1240.0" height="700.0" fill="#ffffff"/>
+  <text x="28" y="24" font-size="11.0" font-weight="600" fill="#58636f">JEV4BILI / ACCESSIBILITY-GATED FEED</text>
+  <text x="1212.0" y="24" text-anchor="end" font-size="11.0" font-weight="600" fill="#58636f">STYLE-1 · FLAT ICON</text>
+  <text x="620.0" y="56" text-anchor="middle" class="title">它怎么工作</text>
+  <text x="620.0" y="82" text-anchor="middle" class="subtitle">只读屏上公开的文字 → 你自己的密钥判定 → 只提醒，绝不替你操作</text>
+  <g id="cloud-src" data-graph-role="container" data-container-id="cloud-src" data-semantic-role="boundary" data-graph-bounds="610,100,870,240">
+  <rect data-graph-role="container" x="610.0" y="100.0" width="260.0" height="140.0" rx="16.0" fill="none" stroke="#dbe5f1" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="628.0" y="124.0" class="section">你自配的端点 · BYOK</text>
+    <rect id="cloud-src-header" data-graph-role="reserved" data-reserved-kind="container-header" x="618" y="106" width="155.06" height="30" fill="none" stroke="none"/>
+  </g>
+  <g id="device" data-graph-role="container" data-container-id="device" data-semantic-role="boundary" data-graph-bounds="30,295,1210,590">
+  <rect data-graph-role="container" x="30.0" y="295.0" width="1180.0" height="295.0" rx="16.0" fill="none" stroke="#dbe5f1" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="48.0" y="319.0" class="section">你的手机 · 本机（不截图 · 不上传图片 · 记录不外发）</text>
+    <rect id="device-header" data-graph-role="reserved" data-reserved-kind="container-header" x="38" y="301" width="353.7" height="30" fill="none" stroke="none"/>
+  </g>
+  <path id="read-screen" data-graph-role="edge" data-edge-id="read-screen" data-source="feed" data-target="a11y" data-edge-kind="flow" data-topic-id="" data-flow="read" data-motion-role="ingress" data-motion-stage="1" data-motion-order="0" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 260,374 L 350,374" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowC)"/>
+  <path id="send-text" data-graph-role="edge" data-edge-id="send-text" data-source="a11y" data-target="judge" data-edge-kind="flow" data-topic-id="" data-flow="data" data-motion-role="extract" data-motion-stage="2" data-motion-order="0" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="1" data-route-stretch="1.0" data-bridges="" d="M 450,340 L 450,174 L 640,174" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowE)"/>
+  <path id="verdict" data-graph-role="edge" data-edge-id="verdict" data-source="judge" data-target="banner" data-edge-kind="flow" data-topic-id="" data-flow="control" data-motion-role="resolve" data-motion-stage="3" data-motion-order="0" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="1" data-route-stretch="1.0" data-bridges="" d="M 840,174 L 1030,174 L 1030,340" fill="none" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowA)"/>
+  <path id="build-profile" data-graph-role="edge" data-edge-id="build-profile" data-source="judge" data-target="profile" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="memory-write" data-motion-stage="4" data-motion-order="0" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 740,208 L 740,480" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
+  <path id="log-local" data-graph-role="edge" data-edge-id="log-local" data-source="banner" data-target="records" data-edge-kind="flow" data-topic-id="" data-flow="write" data-motion-role="memory-write" data-motion-stage="5" data-motion-order="0" data-protocol="" data-via="" data-critical-path-id="" data-critical-hop="" data-critical-hops="" data-critical="false" data-bends="0" data-route-stretch="1.0" data-bridges="" d="M 1030,408 L 1030,480" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowB)"/>
+  <g id="node-judge" data-graph-role="node" data-node-id="judge" data-semantic-role="cloud_service" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="640,140,840,208">
+  <rect x="640.0" y="140.0" width="200.0" height="68.0" rx="12" fill="#faf5ff" stroke="#ede9fe" stroke-width="1.4" filter="url(#shadowSoft)"/>
+  <rect x="652.0" y="153.0" width="42.0" height="42.0" rx="11" fill="#2563eb" opacity="0.12" stroke="#2563eb" stroke-width="1.2"/>
+  <rect x="662.0" y="165.0" width="22" height="18" rx="4" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 667.0 171.0 H 679.0 M 667.0 177.0 H 676.0" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text data-text-role="title" data-full-text="Jev 模型" x="706.0" y="171.0" text-anchor="start" class="node-title" font-size="13.5">Jev 模型</text>
+  <text data-text-role="subtitle" data-full-text="农场度 0~4 · 置信度 0~1" x="706.0" y="190.0" text-anchor="start" class="node-sub" font-size="9.82">农场度 0~4 · 置信度 0~1</text>
+  <text x="830.0" y="154.0" text-anchor="end" font-size="8.5" font-weight="800" fill="#58636f">CLOUD</text>
+  </g>
+  <g id="node-feed" data-graph-role="node" data-node-id="feed" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="60,340,260,408">
+  <rect x="60.0" y="340.0" width="200.0" height="68.0" rx="10.0" fill="#ffffff" stroke="#d1d5db" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="B站「看看」竖屏流" data-text-max-width="176.0" x="160.0" y="374.0" text-anchor="middle" class="node-title" font-size="18">B站「看看」竖屏流</text>
+  <text data-text-role="subtitle" data-full-text="你屏幕上本来就看得见的字" data-text-max-width="176.0" x="160.0" y="396.0" text-anchor="middle" class="node-sub" font-size="12">你屏幕上本来就看得见的字</text>
+  </g>
+  <g id="node-a11y" data-graph-role="node" data-node-id="a11y" data-semantic-role="double_rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="350,340,550,408">
+  <rect x="350.0" y="340.0" width="200.0" height="68.0" rx="10.0" fill="#eff6ff" stroke="#bfdbfe" stroke-width="2.0" filter="url(#shadowSoft)"/>
+  <rect x="356.0" y="346.0" width="188.0" height="56.0" rx="7.0" fill="none" stroke="#bfdbfe" stroke-width="1.2" opacity="0.65"/>
+  <text data-text-role="title" data-full-text="安卓无障碍服务" data-text-max-width="168.0" x="450.0" y="374.0" text-anchor="middle" class="node-title" font-size="18">安卓无障碍服务</text>
+  <text data-text-role="subtitle" data-full-text="只读卡片表皮 · 不截图" data-text-max-width="168.0" x="450.0" y="396.0" text-anchor="middle" class="node-sub" font-size="12">只读卡片表皮 · 不截图</text>
+  </g>
+  <g id="node-banner" data-graph-role="node" data-node-id="banner" data-semantic-role="rect" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="930,340,1130,408">
+  <rect x="930.0" y="340.0" width="200.0" height="68.0" rx="10.0" fill="#fef2f2" stroke="#fee2e2" stroke-width="1.8" filter="url(#shadowSoft)"/>
+  <text data-text-role="title" data-full-text="悬浮横幅提醒" data-text-max-width="176.0" x="1030.0" y="374.0" text-anchor="middle" class="node-title" font-size="18">悬浮横幅提醒</text>
+  <text data-text-role="subtitle" data-full-text="营销号 / 存疑 / 正常" data-text-max-width="176.0" x="1030.0" y="396.0" text-anchor="middle" class="node-sub" font-size="12">营销号 / 存疑 / 正常</text>
+  </g>
+  <g id="node-profile" data-graph-role="node" data-node-id="profile" data-semantic-role="cylinder" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="640,480,840,548">
+  <ellipse cx="740.0" cy="488.5" rx="100.0" ry="8.5" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <rect x="640.0" y="488.5" width="200.0" height="51.0" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <ellipse cx="740.0" cy="539.5" rx="100.0" ry="8.5" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <ellipse cx="740.0" cy="505.84" rx="100.0" ry="8.5" fill="none" stroke="#dcfce7" stroke-opacity="0.45" stroke-width="1.2"/>
+  <ellipse cx="740.0" cy="520.8" rx="100.0" ry="8.5" fill="none" stroke="#dcfce7" stroke-opacity="0.25" stroke-width="1.2"/>
+  <text data-text-role="title" data-full-text="UP主画像" data-text-max-width="176.0" x="740.0" y="508.0" text-anchor="middle" class="node-title" font-size="18">UP主画像</text>
+  <text data-text-role="subtitle" data-full-text="累积历史判定 · 越用越准" data-text-max-width="176.0" x="740.0" y="532.0" text-anchor="middle" class="node-sub" font-size="12">累积历史判定 · 越用越准</text>
+  </g>
+  <g id="node-records" data-graph-role="node" data-node-id="records" data-semantic-role="cylinder" data-motion-role="" data-motion-stage="" data-motion-order="" data-parent="" data-deployment-id="" data-topic-id="" data-span-id="" data-station-order="" data-status="" data-start-ms="" data-duration-ms="" data-parent-span="" data-graph-bounds="930,480,1130,548">
+  <ellipse cx="1030.0" cy="488.5" rx="100.0" ry="8.5" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <rect x="930.0" y="488.5" width="200.0" height="51.0" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <ellipse cx="1030.0" cy="539.5" rx="100.0" ry="8.5" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2.2"/>
+  <ellipse cx="1030.0" cy="505.84" rx="100.0" ry="8.5" fill="none" stroke="#dcfce7" stroke-opacity="0.45" stroke-width="1.2"/>
+  <ellipse cx="1030.0" cy="520.8" rx="100.0" ry="8.5" fill="none" stroke="#dcfce7" stroke-opacity="0.25" stroke-width="1.2"/>
+  <text data-text-role="title" data-full-text="本地记录页" data-text-max-width="176.0" x="1030.0" y="508.0" text-anchor="middle" class="node-title" font-size="18">本地记录页</text>
+  <text data-text-role="subtitle" data-full-text="只存本机 · 最多 300 条" data-text-max-width="176.0" x="1030.0" y="532.0" text-anchor="middle" class="node-sub" font-size="12">只存本机 · 最多 300 条</text>
+  </g>
+  <g id="read-screen-label" data-graph-role="label" data-owner="read-screen" data-graph-bounds="286,343,324,363">
+  <rect x="286.0" y="343.0" width="38.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="305.0" y="357.0" text-anchor="middle" class="arrow-label">读屏</text>
+  </g>
+  <g id="send-text-label" data-graph-role="label" data-owner="send-text" data-graph-bounds="514,143,576,163">
+  <rect x="514.0" y="143.0" width="62.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="545.0" y="157.0" text-anchor="middle" class="arrow-label">文字出网</text>
+  </g>
+  <g id="verdict-label" data-graph-role="label" data-owner="verdict" data-graph-bounds="904,143,966,163">
+  <rect x="904.0" y="143.0" width="62.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="935.0" y="157.0" text-anchor="middle" class="arrow-label">判定结果</text>
+  </g>
+  <g id="build-profile-label" data-graph-role="label" data-owner="build-profile" data-graph-bounds="675,330,737,350">
+  <rect x="675.0" y="330.0" width="62.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="706.0" y="344.0" text-anchor="middle" class="arrow-label">累积画像</text>
+  </g>
+  <g id="log-local-label" data-graph-role="label" data-owner="log-local" data-graph-bounds="965,430,1027,450">
+  <rect x="965.0" y="430.0" width="62.0" height="20" rx="6" fill="#ffffff" opacity="0.94"/>
+  <text x="996.0" y="444.0" text-anchor="middle" class="arrow-label">只存本机</text>
+  </g>
+  <g id="legend" data-graph-role="legend">
+    <rect id="legend-zone" data-graph-role="reserved" data-reserved-kind="legend" x="32" y="604" width="418" height="46" rx="10" fill="none" stroke="none"/>
+    <line data-graph-role="decoration" x1="42.0" y1="618.0" x2="72.0" y2="618.0" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrowC)"/>
+    <text data-graph-role="decoration" x="82.0" y="622.0" class="legend">读屏</text>
+    <line data-graph-role="decoration" x1="134.0" y1="618.0" x2="164.0" y2="618.0" stroke="#f97316" stroke-width="2.4" marker-end="url(#arrowE)"/>
+    <text data-graph-role="decoration" x="174.0" y="622.0" class="legend">文字出网</text>
+    <line data-graph-role="decoration" x1="250.0" y1="618.0" x2="280.0" y2="618.0" stroke="#7c3aed" stroke-width="2.4" marker-end="url(#arrowA)"/>
+    <text data-graph-role="decoration" x="290.0" y="622.0" class="legend">判定</text>
+    <line data-graph-role="decoration" x1="342.0" y1="618.0" x2="372.0" y2="618.0" stroke="#10b981" stroke-width="2.4" marker-end="url(#arrowB)"/>
+    <text data-graph-role="decoration" x="382.0" y="622.0" class="legend">本机落盘</text>
+  </g>
+  <g id="footer" data-graph-role="reserved" data-graph-bounds="40,660,278,676">
+  <text x="40.0" y="672.0" class="footnote">纯无障碍方案 · 不 root · 不调 B 站任何接口 · 零遥测</text>
+  </g>
+
+  <!-- ── 流光层：稳定运行期沿箭头流动的数据脉冲 ── -->
+  <path id="flow-body-read-screen" class="hf-flow" d="M 260,374 L 350,374" fill="none" stroke="#93c5fd" stroke-width="3.84" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="16 25"/>
+  <path id="flow-head-read-screen" class="hf-flow" d="M 260,374 L 350,374" fill="none" stroke="#dbeafe" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="6 35"/>
+  <path id="flow-body-send-text" class="hf-flow" d="M 450,340 L 450,174 L 640,174" fill="none" stroke="#fdba74" stroke-width="3.84" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="16 25"/>
+  <path id="flow-head-send-text" class="hf-flow" d="M 450,340 L 450,174 L 640,174" fill="none" stroke="#ffedd5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="6 35"/>
+  <path id="flow-body-verdict" class="hf-flow" d="M 840,174 L 1030,174 L 1030,340" fill="none" stroke="#c4b5fd" stroke-width="3.84" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="16 25"/>
+  <path id="flow-head-verdict" class="hf-flow" d="M 840,174 L 1030,174 L 1030,340" fill="none" stroke="#ede9fe" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="6 35"/>
+  <path id="flow-body-build-profile" class="hf-flow" d="M 740,208 L 740,480" fill="none" stroke="#6ee7b7" stroke-width="3.84" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="16 25"/>
+  <path id="flow-head-build-profile" class="hf-flow" d="M 740,208 L 740,480" fill="none" stroke="#d1fae5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="6 35"/>
+  <path id="flow-body-log-local" class="hf-flow" d="M 1030,408 L 1030,480" fill="none" stroke="#6ee7b7" stroke-width="3.84" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="16 25"/>
+  <path id="flow-head-log-local" class="hf-flow" d="M 1030,408 L 1030,480" fill="none" stroke="#d1fae5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0" stroke-dasharray="6 35"/>
+      </svg>
+    </div>
+
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        var EDGES = [{ id: "read-screen", marker: "url(#arrowC)", stage: 1 },
+          { id: "send-text", marker: "url(#arrowE)", stage: 2 },
+          { id: "verdict", marker: "url(#arrowA)", stage: 3 },
+          { id: "build-profile", marker: "url(#arrowB)", stage: 4 },
+          { id: "log-local", marker: "url(#arrowB)", stage: 5 }];
+
+        /* 箭头标签：SVG 里是独立的 text，按文档顺序与边一一对应。
+           契约要求标签随各自连线一起出现，不能一开始就全亮着。 */
+        var LABELS = gsap.utils.toArray("#root .arrow-label");
+        gsap.set(LABELS, { opacity: 0 });
+
+        /* 描线：用实测长度设 dash，配合 marker-end 在画完的瞬间才挂上，
+           否则箭头头部会从第一帧就悬在终点。 */
+        EDGES.forEach(function (e, i) {
+          var el = document.getElementById(e.id);
+          if (!el) return;
+          var len = el.getTotalLength();
+          el.style.strokeDasharray = len + " " + len;
+          el.style.strokeDashoffset = len;
+          el.style.markerEnd = "none";
+
+          var at = 0.05 + i * 0.35;
+          tl.to(el, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, at);
+          // 线画到终点，箭头头部才落上
+          tl.set(el, { attr: { "marker-end": e.marker } }, at + 0.35 - 0.02);
+          // 标签与连线同时落位
+          if (LABELS[i]) tl.to(LABELS[i], { opacity: 1, duration: 0.15, ease: "power1.out" }, at + 0.35);
+
+          // 流光：描线完成后淡入，沿箭头持续前进
+          var body = document.getElementById("flow-body-" + e.id);
+          var head = document.getElementById("flow-head-" + e.id);
+          if (body) {
+            tl.to(body, { opacity: 0.9, duration: 0.15, ease: "power1.out" }, 1.8);
+            tl.fromTo(body,
+              { strokeDashoffset: 0 },
+              { strokeDashoffset: -444.0, duration: 3.7, ease: "none" },
+              1.8);
+          }
+          if (head) {
+            tl.to(head, { opacity: 1, duration: 0.15, ease: "power1.out" }, 1.8);
+            tl.fromTo(head,
+              { strokeDashoffset: -10 },
+              { strokeDashoffset: -454.0, duration: 3.7, ease: "none" },
+              1.8);
+          }
+        });
+
+        /* 复位：末端把连线与流光一起淡出，让循环回到第 0 帧的「无连线」状态。
+           节点、文字、容器全程不动——这是 fireworks 自己的运动契约。 */
+        var fadeOut = gsap.utils.toArray("#root .hf-flow");
+        EDGES.forEach(function (e) {
+          var el = document.getElementById(e.id);
+          if (el) fadeOut.push(el);
+        });
+        gsap.utils.toArray("#root .arrow-label").forEach(function (l) { fadeOut.push(l); });
+        tl.to(fadeOut, { opacity: 0, duration: 0.25, ease: "none" }, 5.5);
+
+        window.__timelines["flow"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

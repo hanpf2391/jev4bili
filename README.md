@@ -56,7 +56,9 @@ B站竖屏流里混着大量以流量变现为目的的批量内容，本项目�
 
 ## 它怎么工作
 
-![B站竖屏流 → 安卓无障碍服务读屏 → Jev 模型判定 → 悬浮横幅与记录页](docs/how-it-works.png)
+![B站竖屏流 → 安卓无障碍服务读屏 → Jev 模型判定 → 悬浮横幅与记录页](docs/how-it-works.gif)
+
+> 静态图见 [`docs/how-it-works.png`](docs/how-it-works.png)（2480×1400），矢量源与可编辑 IR 在 [`docs/diagram/`](docs/diagram/)。
 
 - 判断输入只有卡片表皮可见信息，**不看、也不存任何视频内容**
 - UP主画像：同一UP主的历史判定会累积成本地画像，越用越准
