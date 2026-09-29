@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hanpf2391.github.io/jev4bili/sitemap.xml
